@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISO 27001 ISMS Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f4;--surface:#fff;--ink:#14213d;--muted:#5b6678;--line:#d5dbe3;--accent:#0f766e;--s0:#b42318;--s1:#b7791f;--s2:#0f766e;--na:#8892a3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151f;--surface:#182030;--ink:#e6ebf3;--muted:#98a3b8;--line:#2a3550;--accent:#3cc2b3;--s0:#f2766b;--s1:#e8b34f;--s2:#3cc2b3;--na:#7a859a}}
+:root[data-theme="dark"]{--bg:#10151f;--surface:#182030;--ink:#e6ebf3;--muted:#98a3b8;--line:#2a3550;--accent:#3cc2b3;--s0:#f2766b;--s1:#e8b34f;--s2:#3cc2b3;--na:#7a859a}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0 0 20px}
+.hero{display:flex;gap:20px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.big{font-size:44px;font-weight:700;line-height:1;min-width:110px;color:var(--accent)}
+.big small{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:6px}
+.themes{flex:1;min-width:240px;display:grid;gap:8px}
+.th{display:grid;grid-template-columns:110px 1fr 44px;gap:10px;align-items:center;font-size:13px}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.tabs{display:flex;gap:4px;margin:22px 0 12px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--ink);border-color:var(--accent)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+input,select,button{font:inherit;color:var(--ink)}
+.tools input,.tools select{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 10px}
+.tools input{flex:1;min-width:160px}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grp{margin:18px 0 6px;font-weight:700;font-size:14px;color:var(--muted)}
+.row{display:grid;grid-template-columns:48px 1fr 150px;gap:6px 12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--s0);border-radius:6px;padding:10px 12px;margin-bottom:6px}
+.row.s1{border-left-color:var(--s1)}.row.s2{border-left-color:var(--s2)}.row.na{border-left-color:var(--na);opacity:.75}
+.id{font-weight:700;color:var(--muted)}
+.nm{font-weight:500}
+.row select,.row .note{background:transparent;border:1px solid var(--line);border-radius:5px;padding:5px 8px;width:100%}
+.row .note{grid-column:2 / 3}
+.row label{grid-column:3;font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.row .note{grid-row:2}.row label{grid-row:2}
+.empty{color:var(--muted);padding:24px;text-align:center}
+.toast{color:var(--muted);font-size:13px;align-self:center}
+@media (max-width:620px){.row{grid-template-columns:40px 1fr}.row select,.row label,.row .note{grid-column:1 / -1;grid-row:auto}}
+.tabs{flex-wrap:wrap}
+.rr{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--na);border-radius:6px;padding:10px 12px;margin-bottom:6px}
+.rr .f{display:flex;flex-direction:column;font-size:12px;color:var(--muted);gap:2px;flex:1 1 120px}
+.rr .f.w{flex:3 1 240px}
+.rr input,.rr select{background:transparent;border:1px solid var(--line);border-radius:5px;padding:5px 8px;width:100%}
+.badge{font-weight:700;min-width:84px;text-align:center;border-radius:5px;padding:6px 8px;color:#fff}
+.steps{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:0 0 14px;counter-reset:s}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:13px}
+.steps li::before{content:counter(s) ". ";font-weight:700;color:var(--accent)}
+.frm{display:flex;flex-wrap:wrap;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.frm h2{flex:1 1 100%;margin:0;font-size:20px}
+.frm .f{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:3px;flex:1 1 180px}
+.frm .f.w{flex:1 1 100%}
+.frm input,.frm select,.frm textarea{background:transparent;border:1px solid var(--line);border-radius:5px;padding:7px 9px;width:100%;font:inherit;color:var(--ink)}
+.frm .acts{flex:1 1 100%;display:flex;gap:8px}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+@media print{body{background:#fff;color:#000}.tabs,.tools,#hero,.acts,.sub,.steps{display:none!important}.frm{border:0;padding:0}.frm input,.frm select,.frm textarea{color:#000}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--muted)}
+.kpi b{display:block;font-size:30px;line-height:1.15;color:var(--ink)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.dc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.dc h3{margin:0 0 10px;font-size:15px}
+.dc h4{margin:12px 0 6px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.dc .th{grid-template-columns:104px 1fr 32px;margin-bottom:6px}
+.dc p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.tr{display:flex;gap:8px;align-items:center;font-size:13px;margin-bottom:6px}
+.tr .badge{min-width:70px;padding:3px 6px;font-size:12px}
+.sm{display:flex;flex-wrap:wrap;gap:8px}
+.sm button{flex:1 1 140px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:6px;padding:8px 10px;cursor:pointer;font-size:13px}
+.sm button:hover{border-color:var(--accent)}.sm b{display:block;font-size:14px}
+@media print{.dc,.kpi{break-inside:avoid}}
+.tlw{overflow-x:auto;margin-bottom:16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tl{display:grid;grid-template-columns:140px repeat(12,minmax(72px,1fr));min-width:1000px}
+.tl>div{padding:6px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);font-size:12px;min-height:44px}
+.tlh{font-weight:700;color:var(--muted)}
+.tlc.now,.tlh.now{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.chip{display:block;color:#fff;border-radius:4px;padding:2px 5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.chip.done{opacity:.55}.chip.off{opacity:.35;text-decoration:line-through}
+.lg{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}.lg .chip{margin:0;padding:3px 8px}
+.row small.tha{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.det{grid-column:1 / -1;font-size:13px}
+.det summary{cursor:pointer;color:var(--muted)}
+.det label{flex-direction:column;align-items:stretch;gap:2px;margin-top:8px;color:var(--muted)}
+.det textarea{background:transparent;border:1px solid var(--line);border-radius:5px;padding:6px 8px;width:100%;font:inherit;color:var(--ink)}
+.dd{flex:1 1 100%;font-size:13px}
+.dd summary{cursor:pointer;color:var(--muted);margin-top:4px}
+.dg{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.fh{flex:1 1 100%;margin:10px 0 0;font-size:14px;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:4px}
+.pf{background:#fff;color:#000;border:1px solid var(--line);max-width:794px;margin:0 auto;padding:16px;font:13px/1.45 "Sarabun","Noto Sans Thai",Tahoma,sans-serif}
+.pf .pg{margin-bottom:24px}
+.pf table{width:100%;border-collapse:collapse}
+.pf td{border:1px solid #000;padding:4px 6px;vertical-align:top}
+.pf .bh{background:#b7dde8;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pf .tall{height:70px}.pf .sg{height:90px;text-align:center}
+.pf table table td{border:0;padding:1px 4px}
+.pf .ctr{text-align:center;font-weight:700;margin-bottom:4px}
+@page{size:A4;margin:12mm}
+@media print{h1{display:none}.pf{border:0;padding:0;max-width:none}.pf .pg{margin:0}.pf .pg1{page-break-after:always}}
+.eft{border-collapse:collapse;width:100%;font-size:13px}
+.eft th,.eft td{border:1px solid var(--line);padding:5px 8px;text-align:right;white-space:nowrap}
+.eft th:first-child,.eft td:first-child{text-align:left}
+.eft th{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.wrapx{overflow-x:auto}
+.ok{color:var(--s2);font-weight:700}.bad{color:var(--s0);font-weight:700}.nd{color:var(--muted)}
+.tools label.toast input{flex:none;width:90px;margin-left:4px}
+.flow{width:100%;height:auto}
+.fn rect{fill:var(--surface);stroke:var(--line)}.fn.on rect{stroke:var(--accent);stroke-width:2}
+.fb{font-size:20px;font-weight:700;fill:var(--ink)}.fl{font-size:12px;fill:var(--muted)}
+.fa{stroke:var(--muted);stroke-width:1.5}.dsh{stroke-dasharray:5 4}.ft{font-size:12px;fill:var(--ink)}.lane{font-size:13px;font-weight:700;fill:var(--accent)}
+.eft.mp th,.eft.mp td{text-align:left;white-space:normal;vertical-align:top}
+.mp td div{margin-bottom:6px}
+.rr textarea{background:transparent;border:1px solid var(--line);border-radius:5px;padding:5px 8px;width:100%;font:inherit;color:var(--ink)}
+.wide .th{grid-template-columns:210px 1fr 32px}
+</style>
+</head>
+<body>
+<main>
+<h1>ISO 27001 ISMS tracker</h1>
+<p class="sub">Track Annex A controls (2022 edition) and management clauses 4–10. <strong id="dbs">Saved in this browser only</strong></p>
+
+<section class="hero" id="hero" aria-label="Overall readiness">
+  <div class="big"><span id="pct">0%</span><small id="cnt"></small></div>
+  <div class="themes" id="themes"></div>
+</section>
+
+<div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="D">Dashboard</button>
+  <button role="tab" aria-selected="false" data-tab="E">Effectiveness</button>
+  <button role="tab" aria-selected="false" data-tab="A">Annex A controls (SoA)</button>
+  <button role="tab" aria-selected="false" data-tab="C">Clauses 4–10</button>
+  <button role="tab" aria-selected="false" data-tab="R">Risk register</button>
+  <button role="tab" aria-selected="false" data-tab="Z">Assets</button>
+  <button role="tab" aria-selected="false" data-tab="H">Change management</button>
+  <button role="tab" aria-selected="false" data-tab="I">Incidents</button>
+  <button role="tab" aria-selected="false" data-tab="S">Schedule</button>
+  <button role="tab" aria-selected="false" data-tab="X">Access</button>
+</div>
+
+<div class="tools" id="tools">
+  <input id="q" type="search" placeholder="Search by number or name" aria-label="Search">
+  <select id="fs" aria-label="Filter by status">
+    <option value="">All statuses</option><option value="0">Not started</option><option value="1">In progress</option><option value="2">Implemented</option><option value="x">Not applicable</option>
+  </select>
+  <button class="btn" id="copy">Copy as table</button>
+  <button class="btn" id="reset">Reset</button>
+  <span class="toast" id="toast" role="status"></span>
+</div>
+<div id="list"></div>
+</main>
+
+<script>
+const ANNEX=[
+["Organizational","5","Policies for information security|Information security roles and responsibilities|Segregation of duties|Management responsibilities|Contact with authorities|Contact with special interest groups|Threat intelligence|Information security in project management|Inventory of information and other associated assets|Acceptable use of information and other associated assets|Return of assets|Classification of information|Labelling of information|Information transfer|Access control|Identity management|Authentication information|Access rights|Information security in supplier relationships|Addressing information security within supplier agreements|Managing information security in the ICT supply chain|Monitoring, review and change management of supplier services|Information security for use of cloud services|Incident management planning and preparation|Assessment and decision on information security events|Response to information security incidents|Learning from information security incidents|Collection of evidence|Information security during disruption|ICT readiness for business continuity|Legal, statutory, regulatory and contractual requirements|Intellectual property rights|Protection of records|Privacy and protection of PII|Independent review of information security|Compliance with policies, rules and standards|Documented operating procedures"],
+["People","6","Screening|Terms and conditions of employment|Awareness, education and training|Disciplinary process|Responsibilities after termination or change of employment|Confidentiality or non-disclosure agreements|Remote working|Information security event reporting"],
+["Physical","7","Physical security perimeters|Physical entry|Securing offices, rooms and facilities|Physical security monitoring|Protecting against physical and environmental threats|Working in secure areas|Clear desk and clear screen|Equipment siting and protection|Security of assets off-premises|Storage media|Supporting utilities|Cabling security|Equipment maintenance|Secure disposal or re-use of equipment"],
+["Technological","8","User endpoint devices|Privileged access rights|Information access restriction|Access to source code|Secure authentication|Capacity management|Protection against malware|Management of technical vulnerabilities|Configuration management|Information deletion|Data masking|Data leakage prevention|Information backup|Redundancy of information processing facilities|Logging|Monitoring activities|Clock synchronization|Use of privileged utility programs|Installation of software on operational systems|Networks security|Security of network services|Segregation of networks|Web filtering|Use of cryptography|Secure development life cycle|Application security requirements|Secure system architecture and engineering principles|Secure coding|Security testing in development and acceptance|Outsourced development|Separation of development, test and production environments|Change management|Test information|Protection of information systems during audit testing"]];
+const CLAUSES=[
+["4 Context","4","Understand the organization and its context|Needs and expectations of interested parties|Determine the scope of the ISMS|Establish and maintain the ISMS"],
+["5 Leadership","5","Leadership and commitment|Information security policy|Organizational roles, responsibilities and authorities"],
+["6 Planning","6","Risk assessment and treatment process, SoA|Information security objectives|Planning of changes"],
+["7 Support","7","Resources|Competence|Awareness|Communication|Documented information"],
+["8 Operation","8","Operational planning and control|Perform risk assessments|Implement risk treatment plan"],
+["9 Performance evaluation","9","Monitoring, measurement, analysis and evaluation|Internal audit|Management review"],
+["10 Improvement","10","Continual improvement|Nonconformity and corrective action"]];
+function build(src,pre){const o=[];src.forEach(([g,n,l])=>l.split("|").forEach((t,i)=>o.push({id:pre+n+"."+(i+1),g,t})));return o}
+const DATA={A:build(ANNEX,""),C:build(CLAUSES,"")};
+const ST=["Not started","In progress","Implemented"];
+let tab="D",KEY="iso27001-tracker-v1",S={};
+try{S=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){S={}}
+const $=id=>document.getElementById(id);
+const key=(t,id)=>t+"_"+id.replace(/\./g,"_");
+const get=(t,id)=>S[key(t,id)]||{a:1,s:0,n:""};
+let REF=null,last={},dirty=false,inflight=false,tmr=0;
+const busy=()=>dirty||inflight;
+function setStatus(m){const e=$("dbs");if(e)e.textContent=m}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  if(!REF)return;
+  dirty=true;clearTimeout(tmr);setStatus("Saving...");tmr=setTimeout(flush,600);
+}
+async function flush(){
+  if(!REF){dirty=false;return}
+  const nowJ={};Object.keys(S).forEach(k=>nowJ[k]=cj(S[k]));
+  const ch={};Object.keys(nowJ).forEach(k=>{if(last[k]!==nowJ[k])ch[k]=JSON.parse(nowJ[k])});
+  const removed=Object.keys(last).some(k=>!(k in nowJ));
+  dirty=false;inflight=true;
+  try{
+    if(removed)await REF.set(JSON.parse(JSON.stringify(S)));
+    else if(Object.keys(ch).length)await REF.update(ch);
+    last=nowJ;setStatus("Saved to shared database");
+  }catch(e){setStatus(e&&e.code==="invalid_argument"?"View only: you do not have permission to edit":"Could not reach the database. Changes are kept in this browser.")}
+  inflight=false;
+}
+let late=false;
+function applyRemote(d){
+  const n=JSON.parse(JSON.stringify(d||{}));
+  const same=Object.keys(n).length===Object.keys(S).length&&Object.keys(n).every(k=>cj(n[k])===cj(S[k]));
+  last={};Object.keys(n).forEach(k=>last[k]=cj(n[k]));
+  if(same)return;
+  S=n;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  const a=document.activeElement;
+  if(a&&$("list").contains(a)&&/INPUT|SELECT/.test(a.tagName))late=true;else render();
+}
+document.addEventListener("focusout",()=>{if(late)setTimeout(()=>{if(!$("list").contains(document.activeElement)){late=false;render()}},0)});
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function summary(){
+  let all=0,done=0;
+  const groups={};
+  DATA[tab].forEach(c=>{const v=get(tab,c.id),g=groups[c.g]||(groups[c.g]={n:0,d:0,p:0});
+    if(!v.a)return;g.n++;all++;if(v.s==2){g.d++;done++}else if(v.s==1)g.p++});
+  $("pct").textContent=(all?Math.round(done/all*100):0)+"%";
+  $("cnt").textContent=done+" of "+all+" applicable "+(tab=="A"?"controls":"requirements")+" implemented";
+  $("themes").innerHTML=Object.entries(groups).map(([g,v])=>{
+    const d=v.n?v.d/v.n*100:0,p=v.n?v.p/v.n*100:0;
+    return `<div class="th"><span>${esc(g)}</span><div class="bar" role="img" aria-label="${v.d} of ${v.n} implemented"><i style="width:${d}%;background:var(--s2)"></i><i style="width:${p}%;background:var(--s1)"></i></div><span>${v.d}/${v.n}</span></div>`}).join("");
+}
+const RS=['Baseline control','Risk treatment','Baseline + risk treatment','Excluded'];
+function det(v,id){
+  const x=(f,l)=>`<label>${l}<textarea data-x="${f}" rows="2">${esc(v[f]||'')}</textarea></label>`;
+  return `<details class="det"${OPN.has('A'+id)?' open':''} data-o="A${id}"><summary>Reason and current controls${v.rs?': '+esc(v.rs):''}</summary><label>Reason for selection<select data-x="rs"><option value="">Not set</option>${RS.map(o=>`<option${v.rs===o?' selected':''}>${o}</option>`).join('')}</select></label>${x('bo','Current control: Back Office')}${x('fo','Current control: Front Office')}</details>`;
+}
+function render(){
+  const reg="RZHIDSEX".includes(tab);$("hero").hidden=reg;$("tools").hidden=reg;if(reg)return renderReg();
+  const q=$("q").value.trim().toLowerCase(),f=$("fs").value;let last="",h="";
+  DATA[tab].forEach(c=>{
+    const v=get(tab,c.id);
+    if(q&&!(c.id+" "+c.t).toLowerCase().includes(q))return;
+    if(f==="x"?v.a:(f!==""&&(!v.a||v.s!=f)))return;
+    if(c.g!==last){h+=`<div class="grp">${esc(c.g)}</div>`;last=c.g}
+    const cls=!v.a?"na":"s"+v.s;
+    h+=`<div class="row ${cls}" data-id="${c.id}"><span class="id">${c.id}</span><span class="nm">${esc(c.t)}${v.th?`<small class="tha">${esc(v.th)}</small>`:""}</span>
+    <select aria-label="Status for ${c.id}" ${v.a?"":"disabled"}>${ST.map((s,i)=>`<option value="${i}" ${v.s==i?"selected":""}>${s}</option>`).join("")}</select>
+    <input class="note" placeholder="${v.a?"Owner, evidence or link":"Justification for exclusion"}" value="${esc(v.n)}" aria-label="Notes for ${c.id}">
+    <label><input type="checkbox" ${v.a?"checked":""}> Applicable</label>${tab==="A"?det(v,c.id):""}</div>`;
+  });
+  $("list").innerHTML=h||'<div class="empty">No matches. Clear the search or change the status filter.</div>';
+  summary();
+}
+function upd(row,fn){
+  const id=row.dataset.id,v=Object.assign({},get(tab,id));fn(v);S[key(tab,id)]=v;save();return v;
+}
+$("list").addEventListener("change",e=>{
+  const row=e.target.closest(".row");if(!row)return;
+  if(e.target.type==="checkbox")upd(row,v=>v.a=e.target.checked?1:0);
+  else if(e.target.tagName==="TEXTAREA")return;
+  else if(e.target.dataset.x)upd(row,v=>v[e.target.dataset.x]=e.target.value);
+  else if(e.target.tagName==="SELECT")upd(row,v=>v.s=+e.target.value);
+  else return;
+  render();
+});
+$("list").addEventListener("input",e=>{
+  if(e.target.classList.contains("note")){const row=e.target.closest(".row");upd(row,v=>v.n=e.target.value)}
+  else if(e.target.dataset.x&&e.target.tagName==="TEXTAREA"){const row=e.target.closest(".row");upd(row,v=>v[e.target.dataset.x]=e.target.value)}
+});
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  tab=b.dataset.tab;document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));render();
+});
+$("q").oninput=render;$("fs").onchange=render;
+function toast(m){$("toast").textContent=m;setTimeout(()=>$("toast").textContent="",3000)}
+$("copy").onclick=async()=>{
+  const t=["ID\tName\tApplicable\tStatus\tNotes\tReason\tBack Office\tFront Office"].concat(DATA[tab].map(c=>{const v=get(tab,c.id);
+    return [c.id,c.t,v.a?"Yes":"No",v.a?ST[v.s]:"n/a",v.n.replace(/\s+/g," "),v.rs||"",(v.bo||"").replace(/\s+/g," "),(v.fo||"").replace(/\s+/g," ")].join("\t")})).join("\n");
+  try{await navigator.clipboard.writeText(t);toast("Copied. Paste into Excel or Sheets.")}catch(e){toast("Copy blocked by the browser.")}
+};
+$("reset").onclick=()=>{
+  if(!confirm("Clear all saved progress and notes"+(REF?" for everyone using this page":"")+"?"))return;
+  S={};save();render();
+};
+const RL=n=>n>=20?["Extreme","#8b1a10"]:n>=10?["High","var(--s0)"]:n>=5?["Moderate","var(--s1)"]:n>=3?["Low","var(--s2)"]:["Very low","var(--na)"],RLV=['Extreme','High','Moderate','Low','Very low'];
+const opts=(a,v)=>a.map(x=>`<option ${x==v?"selected":""}>${x}</option>`).join("");
+const fld=(l,f,v,cls)=>`<label class="f ${cls||""}">${l}<input data-f="${f}" value="${esc(String(v))}"></label>`;
+const sel=(l,f,a,v)=>`<label class="f">${l}<select data-f="${f}">${opts(a,v)}</select></label>`;
+const N5=[1,2,3,4,5],TR=["Mitigate","Accept","Transfer","Avoid"],TY=["Information","Software","Hardware","Network","Business Process","Personnel","Organization","Site"],CL=["Public","Internal","Confidential","Restricted"];
+const NEW={risks:()=>({t:'',a:'',l:3,i:3,tr:'Mitigate',c:'',of:OFS||'Back Office'}),assets:()=>({n:'',y:'Information',o:'',lo:'',k:'Internal',of:OFS||'Back Office'}),
+  changes:()=>({id:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:'',ty:'Minor',ug:'General',ip:'Low',kd:'New device installation',tg:'HQ data center',rq:'',st:'Requested',ap:'',d:'',rb:'',ar:'Pending',oc:'Pending'}),
+  incidents:()=>({t:'',sv:'',et:'Information Security Event',hm:'In-house',cat:'Confidentiality',rp:'',ow:'',d:'',st:'Reported',nt:'Not assessed'})};
+const CST=['Requested','Approved','Implemented','Closed','Failed','Rejected'],IST=['Reported','Assessed','Plan approved','Resolved','Closed'];
+const dfld=(l,f,v)=>`<label class="f">${l}<input type="date" data-f="${f}" value="${esc(String(v))}"></label>`;
+const stc=(L,v)=>v==='Rejected'?'var(--na)':v==='Failed'?'var(--s0)':v==='Closed'?'var(--s2)':L.indexOf(v)===0?'var(--s0)':'var(--s1)';
+function ensureIds(){
+  let c=false;(S.changes||[]).forEach((r,n)=>{if(!r.id){r.id='c'+Date.now().toString(36)+n;c=true}});if(c)save();
+}
+function relSel(v){
+  ensureIds();const L=S.changes||[];
+  let o='<option value="">None</option>'+L.map(c=>`<option value="${c.id}"${c.id===v?' selected':''}>${esc((c.t||'Untitled change')+' ('+(c.st||'')+')')}</option>`).join('');
+  if(v&&!L.some(c=>c.id===v))o+=`<option value="${esc(v)}" selected>(deleted change)</option>`;
+  return `<label class="f w">Related change request<select name="cr" data-f="cr">${o}</select></label>`;
+}
+let FORM=false;
+function renderForm(){
+  const ch=tab==="H";
+  const T=(l,n,q)=>`<label class="f w">${l}<input name="${n}"${q?" required":""}></label>`;
+  const A=(l,n,q)=>`<label class="f w">${l}<textarea name="${n}" rows="3"${q?" required":""}></textarea></label>`;
+  const P=(l,n,q)=>`<label class="f">${l}<input name="${n}"${q?" required":""}></label>`;
+  const SE=(l,n,a,d)=>`<label class="f">${l}<select name="${n}">${opts(a,d||a[0])}</select></label>`;
+  const D=(l,n)=>`<label class="f">${l}<input type="date" name="${n}"></label>`;
+  const body=ch?chgFormBody(T,A,P,SE,D)
+  :incFormBody(T,A,P,SE,D);
+  $("list").innerHTML=`<form class="frm" id="frm"><h2>${ch?"Change request form (IT-FRM-006)":"Incident report form (IT-FRM-008)"}</h2>${body}<div class="acts"><button class="btn pri" type="submit">Submit to log</button><button class="btn" type="button" data-cancel="1">Cancel</button><button class="btn" type="button" data-print="1">Print</button></div></form>`;
+}
+$("list").addEventListener("submit",e=>{
+  e.preventDefault();if(e.target.id!=="frm")return;
+  const k=tab==="H"?"changes":"incidents",o=Object.fromEntries(new FormData(e.target).entries());
+  {const rec=Object.assign(NEW[k](),o,{sd:new Date().toISOString().slice(0,10)});if(k==="changes")rec.ty=CT[rec.ug+rec.ip]||rec.ty;(S[k]=S[k]||[]).push(rec)}
+  save();FORM=false;renderReg();
+});
+$("list").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.form){FORM=true;renderReg()}
+  else if(b.dataset.cancel){FORM=false;renderReg()}
+  else if(b.dataset.print){try{window.print()}catch(x){}}
+});
+document.querySelector(".tabs").addEventListener("click",()=>{FORM=false;PRN=null;XF=false},true);
+const TGS=['HQ data center','CCB 2','CCB 3','CCB 4','CCB 6'],KD=['New device installation','Modification of existing device','Software installation'],OKF=['Not checked','Ok','Failed'],YN=['No','Yes'],UG=['Urgent','General'],IP=['High','Medium','Low'],AR=['Pending','Approved','Not approved'],OC=['Pending','Successful','Not successful'];
+const CT={UrgentHigh:'Emergency',UrgentMedium:'Major',UrgentLow:'Minor',GeneralHigh:'Major',GeneralMedium:'Minor',GeneralLow:'Minor'},TC={Emergency:'#b42318',Major:'#d99a1a',Minor:'#0f766e'};
+function autoChg(o,f){
+  if((f==='ug'||f==='ip')&&o.ug&&o.ip)o.ty=CT[o.ug+o.ip];
+  if(f==='ar'){if(o.ar==='Approved'&&(!o.st||o.st==='Requested'))o.st='Approved';else if(o.ar==='Not approved')o.st='Rejected'}
+  if(f==='oc'){if(o.oc==='Successful')o.st='Closed';else if(o.oc==='Not successful')o.st='Failed'}
+}
+function tfld(l,f,v){return `<label class="f">${l}<input type="time" data-f="${f}" value="${esc(String(v||''))}"></label>`}
+function chgRow(r,n,b,x){
+  const v=f=>r[f]||'',dg=(t,h)=>`<details class="dd"${OPN.has(tab+n+t)?' open':''} data-o="${tab+n+t}"><summary>${t}</summary><div class="dg">${h}</div></details>`,ty=v('ty')||'Minor';
+  const top=fld('Subject','t',v('t'),'w')+sel('Kind of change','kd',KD,v('kd'))+sel('Urgency','ug',UG,v('ug'))+sel('Impact','ip',IP,v('ip'))+`<span class="badge" style="background:${TC[ty]||'var(--na)'};color:${ty==='Major'?'#1a1a1a':'#fff'}" title="Change type from the urgency and impact matrix">${ty}</span>`+dfld('Execution date','d',v('d'))+tfld('Time','et',v('et'))+fld('Responsible for execution','ex',v('ex'))+sel('Status','st',CST,r.st);
+  const g1=fld('Request no. (HQ/CCB/CHN/number/year)','no',v('no'))+fld('Requester name','rq',v('rq'))+dfld('Request date','rd',v('rd'))+tfld('Request time','rt',v('rt'))+fld('Position','pos',v('pos'))+fld('Unit','un',v('un'))+fld('Phone','ph',v('ph'))+fld('Email','em',v('em'))+fld('Incident no. (several: separate with commas)','inc',v('inc'))+fld('Problem no.','prb',v('prb'))+sel('Request to','tg',TGS,v('tg'));
+  const g2=fld('Reason','ds',v('ds'),'w')+sel('Power supply','pw',OKF,v('pw'))+sel('Connector or module','cn',OKF,v('cn'))+sel('Hardware process','hw',OKF,v('hw'))+sel('Setting equipment','sq',OKF,v('sq'))+sel('Physical environment and network cable','pe',OKF,v('pe'))+fld('Details of modification to the existing device','md',v('md'),'w');
+  const g3=fld('Repair order no. (SAP)','sap',v('sap'))+fld('Incident notice no. (HQ/CCB/INC)','rin',v('rin'))+fld('Asset in or out permit no.','ast',v('ast'))+sel('Change control plan attached','a1',YN,v('a1'))+sel('Rollback plan attached','a2',YN,v('a2'))+sel('Test results attached','a3',YN,v('a3'))+fld('Other attachments','ao',v('ao'))+fld('Rollback plan (summary)','rb',v('rb'),'w')+fld('Test plan or results (summary)','tp',v('tp'),'w')+fld('Systems affected','im',v('im'),'w');
+  const g4=fld('Approver','ap',v('ap'))+fld('Approver position','apos',v('apos'))+sel('Decision','ar',AR,v('ar'))+dfld('Decision date','adt',v('adt'))+fld('Reason if not approved','arn',v('arn'),'w');
+  let sv='';for(let i=1;i<5;i++)sv+=fld('Service '+i+' checked','sv'+i+'n',v('sv'+i+'n'))+sel('Service '+i+' result','sv'+i+'r',OKF,v('sv'+i+'r'));
+  const g5=fld('Result of the change','rs',v('rs'),'w')+dfld('Completed date','cd',v('cd'))+tfld('Completed time','ct',v('ct'))+sel('Outcome','oc',OC,v('oc'))+fld('Reason if not successful','okn',v('okn'),'w')+sv;
+  const g6=fld('Software name','sw',v('sw'))+dfld('Contract signing date','swd',v('swd'))+fld('Contract period','swp',v('swp'))+fld('Contract reference no.','swc',v('swc'))+fld('Vendor','swv',v('swv'))+fld('Contact person','swk',v('swk'))+fld('Contact phone','swt',v('swt'))+fld('License ID','lid',v('lid'))+fld('License details','ldt',v('ldt'))+fld('Number of licenses','lcn',v('lcn'));
+  return b+top+dg('Part 1: requester details',g1)+dg('Reason, device checks and modification',g2)+dg('References and attachments',g3)+dg('Part 2: approval',g4)+dg('Parts 3 and 4: result, outcome and service checks',g5)+dg('Part 5: software installation (IT-FRM-010)',g6)+`<button class="btn" data-prn="${n}">Print form</button>`+x;
+}
+function chgFormBody(T,A,P,SE,D){
+  const H=t=>`<h3 class="fh">${t}</h3>`,TM=(l,n)=>`<label class="f">${l}<input type="time" name="${n}"></label>`;
+  return H('Part 1: requester')+P('Request no. (HQ/CCB/CHN/number/year)','no')+D('Request date','rd')+TM('Request time','rt')+P('Requester name','rq',1)+P('Position','pos')+P('Unit','un')+P('Phone','ph')+P('Email','em')+P('Incident no. (several: separate with commas)','inc')+P('Problem no.','prb')+SE('Request to','tg',TGS)
+  +H('Change details')+T('Subject','t',1)+SE('Kind of change','kd',KD)+A('Reason','ds',1)
+  +H('New device installation checks')+SE('Power supply','pw',OKF)+SE('Connector or module','cn',OKF)+SE('Hardware process','hw',OKF)+SE('Setting equipment','sq',OKF)+SE('Physical environment and network cable','pe',OKF)
+  +A('Details of modification to the existing device','md')
+  +H('Reference documents')+P('Repair order no. (SAP)','sap')+P('Incident notice no. (HQ/CCB/INC)','rin')+P('Asset in or out permit no. (HQ/CCB/ASSET)','ast')
+  +H('Environmental impact and change type')+SE('Urgency','ug',UG,'General')+SE('Impact','ip',IP,'Low')
+  +`<p class="sub" style="flex:1 1 100%;margin:0">Change type: urgent and high is Emergency; urgent and medium, or general and high, is Major; everything else is Minor. Emergency and Major changes must be approved by a division director or above. For an Emergency, phone the division director for approval.</p>`
+  +H('Attachments')+SE('Change control plan attached','a1',YN)+SE('Rollback plan attached','a2',YN)+SE('Test results attached','a3',YN)+P('Other attachments','ao')
+  +H('Execution')+D('Planned execution date','d')+TM('Planned execution time','et')+P('Person responsible for execution','ex')+P('Approver','ap')
+  +H('Part 5: software installation (IT-FRM-010), only if installing software')+P('Software name','sw')+D('Contract signing date','swd')+P('Contract period','swp')+P('Contract reference no.','swc')+P('Vendor','swv')+P('Contact person','swk')+P('Contact phone','swt')+P('License ID','lid')+P('License details','ldt')+P('Number of licenses','lcn');
+}
+let PRN=null;
+function renderPrint(){
+  const r=(S.changes||[])[PRN];if(!r){PRN=null;return renderProc()}
+  const v=f=>esc(String(r[f]||'')),ck=b=>b?'&#9745;':'&#9744;';
+  const th=s=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s||'');return m?m[3]+'/'+m[2]+'/'+(+m[1]+543):''};
+  const hdr=pg=>`<div class="ctr">ข้อมูลใช้ภายในเท่านั้น</div><table><tr><td rowspan="2" style="width:70px;text-align:center"><b>EXAT</b></td><td rowspan="2"><b>แบบฟอร์ม<br>ร้องขอการเปลี่ยนแปลง</b></td><td>เอกสารเลขที่ IT-FRM-006</td><td>แก้ไขครั้งที่ 4</td></tr><tr><td>วันประกาศใช้ 30 เม.ย. 2567</td><td>หน้าที่ ${pg} ของ 2</td></tr></table><div style="height:8px"></div>`;
+  const nw=r.kd==='New device installation',mo=r.kd==='Modification of existing device',so=r.kd==='Software installation';
+  const chk=(f,l)=>`<tr><td>- ${l}</td><td>${ck(r[f]==='Ok')} Ok ${ck(r[f]==='Failed')} Failed</td></tr>`;
+  const cell=(u,i,t)=>`<td>${ck(r.ug===u&&r.ip===i)} ${t}</td>`;
+  const tg=['HQ data center','CCB 2','CCB 3','CCB 4','CCB 6'].map((t,i)=>`${ck(r.tg===t)} ${i?t:'ศูนย์บริหารทางพิเศษฯ/HQ'}`).join(' &nbsp; ');
+  const p1=hdr(1)+`<table>
+<tr><td colspan="4" class="bh">ส่วนที่ 1 สำหรับผู้ร้อง</td></tr>
+<tr><td colspan="4"><b>เลขที่คำร้อง :</b> ${v('no')||'HQ/CCB/CHN/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (ปี พ.ศ.)'}</td></tr>
+<tr><td style="width:90px">ชื่อ</td><td>${v('rq')}</td><td style="width:90px">วันที่</td><td>${th(r.rd)} &nbsp; เวลา ${v('rt')}</td></tr>
+<tr><td>ตำแหน่ง</td><td>${v('pos')}</td><td>หน่วยงาน</td><td>${v('un')}</td></tr>
+<tr><td>โทรศัพท์</td><td>${v('ph')}</td><td>อีเมล์</td><td>${v('em')}</td></tr>
+<tr><td>เลขที่เหตุการณ์</td><td>${v('inc')}</td><td>เลขที่ปัญหา</td><td>${v('prb')}</td></tr>
+<tr><td colspan="4">มีความประสงค์ร้องขอการเปลี่ยนแปลง ${tg}</td></tr>
+<tr><td colspan="4" class="bh">รายละเอียดของการเปลี่ยนแปลงแก้ไขระบบ</td></tr>
+<tr><td>เรื่อง</td><td colspan="3">${v('t')}</td></tr>
+<tr><td>รายละเอียด</td><td colspan="2">${ck(nw)} ติดตั้งอุปกรณ์ใหม่<table>${chk('pw','ระบบไฟฟ้าของอุปกรณ์ (Power Supply)')}${chk('cn','อุปกรณ์เชื่อมต่อ (Connector/Module)')}${chk('hw','กระบวนการทำงานของอุปกรณ์ (Hardware Process)')}${chk('sq','อุปกรณ์สำหรับการติดตั้ง (Setting Equipment)')}${chk('pe','Physical Environment &amp; Network Cable')}</table></td><td>${ck(mo)} แก้ไขอุปกรณ์ที่ติดตั้งอยู่เดิม<br>${v('md')}<br><br>${ck(so)} การติดตั้งซอฟต์แวร์ (IT-FRM-010)</td></tr>
+<tr><td class="tall">เหตุผล</td><td colspan="3">${v('ds')}</td></tr>
+<tr><td>เอกสารอ้างอิง</td><td colspan="3">1. เลขที่ใบสั่งซ่อม (SAP): ${v('sap')}<br>2. ใบแจ้งเหตุขัดข้อง HQ/CCB/INC: ${v('rin')}<br>3. ใบการนำทรัพย์สินเข้า-ออกพื้นที่ฯ HQ/CCB/ASSET: ${v('ast')}</td></tr>
+<tr><td>ผลกระทบด้านสภาพแวดล้อม</td><td colspan="3"><table style="width:100%"><tr><td></td><td><b>High</b></td><td><b>Medium</b></td><td><b>Low</b></td></tr><tr><td><b>Urgent</b></td>${cell('Urgent','High','Emergency')}${cell('Urgent','Medium','Major')}${cell('Urgent','Low','Minor')}</tr><tr><td><b>General</b></td>${cell('General','High','Major')}${cell('General','Medium','Minor')}${cell('General','Low','Minor')}</tr></table>ประเภทของการเปลี่ยนแปลง Emergency และ Major ผู้อนุมัติการเปลี่ยนแปลง ผอ.กอง ขึ้นไป กรณีที่เป็น Emergency change จะโทรขออนุมัติการเปลี่ยนแปลงจาก ผอ.กอง</td></tr>
+<tr><td>เอกสารประกอบ</td><td colspan="2">${ck(r.a1==='Yes')} แผน Change control plan<br>${ck(r.a2==='Yes')} แผน Rollback Plan<br>${ck(r.a3==='Yes')} ผลการทดสอบ</td><td>อื่นๆ: ${v('ao')}</td></tr>
+<tr><td>วันที่ดำเนินการ</td><td>${th(r.d)}</td><td>เวลา</td><td>${v('et')}</td></tr>
+<tr><td>ผู้รับผิดชอบดำเนินการ</td><td colspan="3">${v('ex')}</td></tr>
+<tr><td colspan="2" class="bh">ผู้ร้องขอเปลี่ยนแปลงแก้ไขระบบ</td><td colspan="2" class="bh">ผู้รับผิดชอบการเปลี่ยนแปลง</td></tr>
+<tr><td colspan="2" class="sg">ลงนาม :<br><br><br>( ${v('rq')} )<br>....... / ......................... / ...............</td><td colspan="2" class="sg">ลงนาม :<br><br><br>( ${v('ex')} )<br>....... / ......................... / ...............</td></tr></table>`;
+  const sv=[1,2,3,4].map(i=>`<tr><td>-Services for Application ${v('sv'+i+'n')}</td><td>${ck(r['sv'+i+'r']==='Ok')} Ok ${ck(r['sv'+i+'r']==='Failed')} Failed</td></tr>`).join('');
+  const p2=hdr(2)+`<table>
+<tr><td colspan="4" class="bh">ส่วนที่ 2 สำหรับผู้อนุมัติการเปลี่ยนแปลง/ รับทราบการเปลี่ยนแปลง (สำหรับหัวหน้างานขึ้นไป)</td></tr>
+<tr><td style="width:90px"><b>ผลการพิจารณา</b></td><td colspan="3">${ck(r.ar==='Approved')} อนุมัติ<br>${ck(r.ar==='Not approved')} ไม่อนุมัติเนื่องจาก ${v('arn')}</td></tr>
+<tr><td colspan="4" class="sg">ลงนาม :<br><br>( ${v('ap')} )<br>ตำแหน่ง ${v('apos')}<br>${th(r.adt)||'......... / ......................... / ...............'}</td></tr>
+<tr><td colspan="4" class="bh">ส่วนที่ 3 ผลการดำเนินการเปลี่ยนแปลง (ผู้ร้องขอ/ ผู้ปฏิบัติงาน)</td></tr>
+<tr><td colspan="4" class="tall">ผลการดำเนินการเปลี่ยนแปลง<br>${v('rs')}</td></tr>
+<tr><td colspan="2">วันที่ดำเนินการแล้วเสร็จ ${th(r.cd)}</td><td colspan="2">เวลา ${v('ct')}</td></tr>
+<tr><td colspan="4" class="bh">ส่วนที่ 4 รายงานผลการดำเนินการเปลี่ยนแปลง (ผู้ร้องขอ/ ผู้ปฏิบัติงาน)</td></tr>
+<tr><td colspan="4">${ck(r.oc==='Successful')} ดำเนินการสำเร็จ<br>${ck(r.oc==='Not successful')} ดำเนินการไม่สำเร็จ เนื่องจาก ${v('okn')}<br><br>รายละเอียดการตรวจสอบ Services หลังการดำเนินการ<table style="width:100%">${sv}</table></td></tr>
+<tr><td colspan="4" class="bh">ส่วนที่ 5 รายละเอียดการติดตั้งซอฟต์แวร์ (IT-FRM-010)</td></tr>
+<tr><td>ชื่อซอฟต์แวร์</td><td>${v('sw')}</td><td>License ID</td><td>${v('lid')}</td></tr>
+<tr><td>วันที่ลงนามสัญญา</td><td>${th(r.swd)}</td><td>รายละเอียดของ License</td><td>${v('ldt')}</td></tr>
+<tr><td>ระยะเวลาสัญญา</td><td>${v('swp')}</td><td>จำนวน License</td><td>${v('lcn')}</td></tr>
+<tr><td>อ้างอิงสัญญาเลขที่</td><td colspan="3">${v('swc')}</td></tr>
+<tr><td>บริษัทฯ ผู้จัดจำหน่าย</td><td colspan="3">${v('swv')}</td></tr>
+<tr><td>ผู้ติดต่อ</td><td>${v('swk')}</td><td>หมายเลขโทรศัพท์</td><td>${v('swt')}</td></tr></table>`;
+  $('list').innerHTML=`<div class="tools"><button class="btn" data-pback="1">Back to log</button><button class="btn pri" data-print="1">Print</button></div><p class="sub">Choose A4 in the print dialog. If Print does nothing, press Ctrl+P (Cmd+P on a Mac). Dates are shown in the Buddhist era, as on the paper form.</p><div class="pf"><div class="pg pg1">${p1}</div><div class="pg">${p2}</div></div>`;
+}
+$('list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.prn){PRN=+b.dataset.prn;renderReg()}else if(b.dataset.pback){PRN=null;renderReg()}});
+const IT=['Information Security Event','Information Security Incident','Information Security Weakness'],LV=['High','Medium','Low'],HM=['In-house','External service provider'],CIA=['Confidentiality','Integrity','Availability','Other'],NTF=['Not assessed','Not required','Required, done','Required, pending'];
+const IPM={HighHigh:'Urgent',HighMedium:'High',HighLow:'Medium',MediumHigh:'High',MediumMedium:'Medium',MediumLow:'Low',LowHigh:'Medium',LowMedium:'Low',LowLow:'Low'},PC={Urgent:'#8b1a10',High:'#b42318',Medium:'#d99a1a',Low:'#0f766e'};
+function autoInc(o,f){
+  if((f==='ug'||f==='ip')&&o.ug&&o.ip){o.sv=IPM[o.ug+o.ip];if(o.st==='Reported')o.st='Assessed'}
+  if((f==='sa'||f==='pa')&&o.sa&&o.pa&&(o.st==='Reported'||o.st==='Assessed'))o.st='Plan approved';
+  if(f==='cd'&&o.cd&&['Reported','Assessed','Plan approved'].includes(o.st))o.st='Resolved';
+  if((f==='an'||f==='rc')&&o.an&&o.rc&&o.st!=='Closed')o.st='Closed';
+}
+function incRow(r,n,b,x){
+  const v=f=>r[f]||'',dg=(t,h)=>`<details class="dd"${OPN.has(tab+n+t)?' open':''} data-o="${tab+n+t}"><summary>${t}</summary><div class="dg">${h}</div></details>`,pr=v('sv');
+  const top=fld('Incident title','t',v('t'),'w')+sel('Event type','et',IT,v('et'))+sel('Urgency','ug',LV,v('ug'))+sel('Impact','ip',LV,v('ip'))+`<span class="badge" style="background:${PC[pr]||'var(--na)'};color:${pr==='Medium'?'#1a1a1a':'#fff'}" title="Priority from the urgency and impact matrix">${pr||'Not assessed'}</span>`+dfld('Date reported','d',v('d'))+fld('Reported by','rp',v('rp'))+fld('Incident owner','ow',v('ow'))+sel('Status','st',IST,r.st);
+  const g1=fld('Register no. (HQ/CCB/INC/number/year)','no',v('no'))+fld('Repair order no. (SAP)','sap',v('sap'))+tfld('Time reported','rt',v('rt'))+fld('Position','pos',v('pos'))+fld('Unit','un',v('un'))+fld('Phone','ph',v('ph'))+fld('Email','em',v('em'))+fld('What happened','ds',v('ds'),'w')+fld('Where','wr',v('wr'))+fld('When','wn',v('wn'))+fld('Impact (systems, data, people)','im',v('im'),'w')+sel('Security impact','cat',CIA,v('cat'))+sel('Notification','nt',NTF,v('nt'));
+  const g2=fld('Handling approach','hp',v('hp'),'w')+sel('Handled by','hm',HM,v('hm'))+fld('Person responsible for handling','hr',v('hr'))+fld('System owner approval (name)','sa',v('sa'))+dfld('Approval date','sad',v('sad'))+fld('Supervisor approval (name)','pa',v('pa'))+dfld('Approval date','pad',v('pad'));
+  const g3=relSel(v('cr'))+fld('Summary of the result','rs',v('rs'),'w')+fld('Completed by','rsn',v('rsn'))+dfld('Completed date','cd',v('cd'))+tfld('Completed time','ct',v('ct'));
+  const g4=fld('Root cause','rc',v('rc'),'w')+fld('Prevention','pv',v('pv'),'w')+fld('Analysed by','an',v('an'));
+  return b+top+dg('Part 1: report and event details',g1)+dg('Part 2: assessment and handling plan',g2)+dg('Part 3: result and related change request',g3)+dg('Part 4: root cause and prevention',g4)+`<button class="btn" data-prn="${n}">Print form</button>`+x;
+}
+function incFormBody(T,A,P,SE,D){
+  const H=t=>`<h3 class="fh">${t}</h3>`,TM=(l,n)=>`<label class="f">${l}<input type="time" name="${n}"></label>`;
+  return H('Part 1: record of the incident report')+P('Register no. (HQ/CCB/INC/number/year)','no')+P('Repair order no. (SAP)','sap')+T('Incident title','t',1)+P('Reported by (name)','rp',1)+D('Date reported','d')+TM('Time reported','rt')+P('Position','pos')+P('Unit','un')+P('Phone','ph')+P('Email','em')
+  +H('Event details')+A('What happened','ds',1)+P('Where','wr')+P('When','wn')+SE('Event type (system administrator)','et',IT)+A('Impact (systems, data, people affected)','im')+SE('Security impact','cat',CIA)+SE('Notification (authorities, customers)','nt',NTF)+relSel('')
+  +`<p class="sub" style="flex:1 1 100%;margin:0">Parts 2 to 4 (assessment, approval, result and root cause) are completed in the log after the report is submitted.</p>`;
+}
+function renderPrintInc(){
+  const r=(S.incidents||[])[PRN];if(!r){PRN=null;return renderProc()}
+  const v=f=>esc(String(r[f]||'')),ck=b=>b?'&#9745;':'&#9744;';
+  const th=s=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s||'');return m?m[3]+'/'+m[2]+'/'+(+m[1]+543):''};
+  const hdr=pg=>`<div class="ctr">ข้อมูลใช้ภายในเท่านั้น</div><table><tr><td rowspan="2" style="width:70px;text-align:center"><b>EXAT</b></td><td rowspan="2"><b>แบบฟอร์ม<br>บันทึกการแจ้งเหตุขัดข้อง</b></td><td>เอกสารเลขที่ IT-FRM-008</td><td>แก้ไขครั้งที่ 3</td></tr><tr><td>วันประกาศใช้ 30 เม.ย. 2567</td><td>หน้าที่ ${pg} ของ 2</td></tr></table><div style="height:8px"></div>`;
+  const cell=(u,i,t)=>`<td>${ck(r.ug===u&&r.ip===i)} ${t}</td>`,chg=(S.changes||[]).find(c=>c.id===r.cr);
+  const p1=hdr(1)+`<table>
+<tr><td colspan="2"><b>นายทะเบียน</b></td><td colspan="2">${v('no')||'HQ/CCB/INC/ &nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp; (ปี พ.ศ.)'}</td></tr>
+<tr><td colspan="2" class="bh">ส่วนที่ 1 การบันทึกเหตุขัดข้อง (ผู้รับแจ้งเหตุการณ์)</td><td colspan="2">อ้างอิงเลขที่ใบสั่งซ่อม (SAP): ${v('sap')}</td></tr>
+<tr><td style="width:90px">ชื่อ</td><td>${v('rp')}</td><td style="width:110px">วันที่ ที่แจ้งเหตุ</td><td>${th(r.d)} &nbsp; เวลา ${v('rt')}</td></tr>
+<tr><td>ตำแหน่ง</td><td>${v('pos')}</td><td>หน่วยงาน</td><td>${v('un')}</td></tr>
+<tr><td>โทรศัพท์</td><td>${v('ph')}</td><td>อีเมล์</td><td>${v('em')}</td></tr>
+<tr><td colspan="4" class="bh">รายละเอียดเหตุการณ์</td></tr>
+<tr><td colspan="4" class="tall">เกิดอะไร: ${v('ds')}<br><br>ที่ไหน: ${v('wr')}<br><br>เกิดเมื่อไหร่: ${v('wn')}</td></tr>
+<tr><td colspan="4" class="bh">ประเภทเหตุการณ์ (ผู้ดูแลระบบ)</td></tr>
+<tr><td colspan="4">${IT.map(t=>ck(r.et===t)+' '+t).join(' &nbsp;&nbsp; ')}</td></tr>
+<tr><td colspan="4" class="bh">ส่วนที่ 2 การประเมินและวิเคราะห์เหตุการณ์ (เฉพาะ Information Security Incident)</td></tr>
+<tr><td colspan="4"><table style="width:100%"><tr><td>ความเร่งด่วน (Urgency) \ ผลกระทบ (Impact)</td><td><b>High</b></td><td><b>Medium</b></td><td><b>Low</b></td></tr><tr><td><b>High</b></td>${cell('High','High','Urgent')}${cell('High','Medium','High')}${cell('High','Low','Medium')}</tr><tr><td><b>Medium</b></td>${cell('Medium','High','High')}${cell('Medium','Medium','Medium')}${cell('Medium','Low','Low')}</tr><tr><td><b>Low</b></td>${cell('Low','High','Medium')}${cell('Low','Medium','Low')}${cell('Low','Low','Low')}</tr></table><b>ประเภทของเหตุขัดข้อง (หัวหน้างานประเมิน):</b> ${v('sv')}</td></tr>
+<tr><td colspan="4" class="tall">แนวทางการจัดการเหตุการณ์ : ${v('hp')}</td></tr>
+<tr><td>การจัดการ</td><td colspan="3">${ck(r.hm==='In-house')} ดำเนินการเอง &nbsp;&nbsp;&nbsp; ${ck(r.hm==='External service provider')} ดำเนินการโดยผู้ให้บริการภายนอก</td></tr>
+<tr><td class="bh">ระบุผู้รับผิดชอบดำเนินการจัดการ</td><td colspan="3">${v('hr')}</td></tr>
+<tr><td class="bh">เจ้าของระบบอนุมัติแผนจัดการ (ผู้ดูแลระบบ)</td><td colspan="2">ลงชื่อ ${v('sa')}</td><td>วันที่ ${th(r.sad)}</td></tr>
+<tr><td class="bh">ผู้อนุมัติแนวทางจัดการเหตุการณ์ (หัวหน้างาน)</td><td colspan="2">ลงชื่อ ${v('pa')}</td><td>วันที่ ${th(r.pad)}</td></tr></table>`;
+  const p2=hdr(2)+`<table>
+<tr><td colspan="3" class="bh">ส่วนที่ 3 สรุปผลการดำเนินการ (เจ้าของระบบ)</td></tr>
+<tr><td colspan="3"><b>Change Request ที่เกี่ยวข้อง</b> ${ck(!!chg)} มี หมายเลข ${chg?esc(String(chg.no||chg.t||'')):'HQ/CCB/CHN/ &nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp; (ปี พ.ศ.)'} &nbsp;&nbsp; ${ck(!chg)} ไม่มี</td></tr>
+<tr><td colspan="3" style="height:150px">${v('rs')}</td></tr>
+<tr><td>ลงชื่อผู้ดำเนินการ ${v('rsn')}</td><td>วันที่ดำเนินการแล้วเสร็จ ${th(r.cd)}</td><td>เวลา ${v('ct')}</td></tr>
+<tr><td colspan="3" class="bh">ส่วนที่ 4 วิเคราะห์สาเหตุหลักและแนวทางป้องกัน (เจ้าของระบบ)</td></tr>
+<tr><td colspan="3" style="height:230px">สาเหตุหลัก (root cause) : ${v('rc')}</td></tr>
+<tr><td colspan="3" style="height:330px">แนวทางการป้องกัน : ${v('pv')}</td></tr>
+<tr><td><b>ลงชื่อผู้วิเคราะห์สาเหตุและแนวทางป้องกัน</b></td><td colspan="2" style="height:70px">${v('an')}</td></tr></table>`;
+  $('list').innerHTML=`<div class="tools"><button class="btn" data-pback="1">Back to log</button><button class="btn pri" data-print="1">Print</button></div><p class="sub">Choose A4 in the print dialog. If Print does nothing, press Ctrl+P (Cmd+P on a Mac). Dates are shown in the Buddhist era, as on the paper form.</p><div class="pf"><div class="pg pg1">${p1}</div><div class="pg">${p2}</div></div>`;
+}
+const EF_SITES=['HQ','CCB 1','CCB 2','CCB 3','CCB 4','CCB 6'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let EFF={from:'',to:''};
+NEW.eff=()=>({m:new Date().toISOString().slice(0,7),s:'HQ',io:'',dt:'',eq:'',mt:''});
+const nn=v=>(v===''||v==null||isNaN(+v))?null:+v;
+const dim=m=>new Date(+m.slice(0,4),+m.slice(5,7),0).getDate();
+const ml=m=>MON[+m.slice(5,7)-1]+' '+m.slice(0,4);
+const mfld=(l,f,v)=>`<label class="f">${l}<input type="month" data-f="${f}" value="${esc(String(v||''))}"></label>`;
+const nfld=(l,f,v)=>`<label class="f">${l}<input type="number" min="0" data-f="${f}" value="${esc(String(v==null?'':v))}"></label>`;
+function effRange(){
+  const all=[...new Set((S.eff||[]).map(r=>r.m).filter(Boolean))].sort();
+  let f=EFF.from&&all.includes(EFF.from)?EFF.from:all[0],t=EFF.to&&all.includes(EFF.to)?EFF.to:all[all.length-1];
+  if(f>t)[f,t]=[t,f];
+  return{all,from:f,to:t,ms:all.filter(m=>m>=f&&m<=t)};
+}
+function effHtml(){
+  const R=S.eff||[];if(!R.length)return '<div class="empty">No records yet. Add a record below.</div>';
+  const rg=effRange(),ms=rg.ms,T=S.efft||{},tgA=nn(T.av===undefined?100:T.av),tgM=nn(T.mt===undefined?100:T.mt);
+  const recs=(s,m)=>R.filter(r=>r.s===s&&r.m===m);
+  const cIo=(s,m)=>{let t=null;recs(s,m).forEach(r=>{const v=nn(r.io);if(v!==null)t=(t||0)+v});return t};
+  const cAv=(s,m)=>{let q=0,d=0,k=false;recs(s,m).forEach(r=>{const v=nn(r.dt);if(v!==null){q+=dim(m)*1440;d+=v;k=true}});return k?(q-d)/q*100:null};
+  const cMt=(s,m)=>{let e=0,t=0,k=false;recs(s,m).forEach(r=>{const a=nn(r.eq),b=nn(r.mt);if(a!==null&&b!==null){e+=a;t+=b;k=true}});return k&&e>0?t/e*100:null};
+  const agg=s=>{const o={io:0,nio:0,q:0,d:0,e:0,t:0};ms.forEach(m=>recs(s,m).forEach(r=>{const io=nn(r.io),dt=nn(r.dt),a=nn(r.eq),b=nn(r.mt);if(io!==null){o.io+=io;o.nio++}if(dt!==null){o.q+=dim(m)*1440;o.d+=dt}if(a!==null&&b!==null){o.e+=a;o.t+=b}}));return o};
+  const A={};EF_SITES.forEach(s=>A[s]=agg(s));
+  const tot=EF_SITES.reduce((o,s)=>({io:o.io+A[s].io,q:o.q+A[s].q,d:o.d+A[s].d,e:o.e+A[s].e,t:o.t+A[s].t}),{io:0,q:0,d:0,e:0,t:0});
+  const pv=(a,b)=>b>0?a/b*100:null,f2=v=>v===null?'–':v.toFixed(2)+'%',cls=(v,t)=>v===null?'nd':(t===null?(v>=100?'ok':''):(v>=t?'ok':'bad'));
+  const has=s=>R.some(r=>r.s===s&&ms.includes(r.m)),av=pv(tot.q-tot.d,tot.q),mt=pv(tot.t,tot.e);
+  const kpi=(n,l,c)=>`<div class="kpi"><b class="${c||''}">${n}</b>${l}</div>`;
+  const kp=`<div class="kpis">${kpi(tot.io.toLocaleString(),'Data center entries and exits')}${kpi(f2(mt),'Equipment maintained'+(tgM!==null?' (target '+tgM+'%)':''),cls(mt,tgM))}${kpi(f2(av),'Service availability'+(tgA!==null?' (target '+tgA+'%)':''),cls(av,tgA))}${kpi(tot.d.toLocaleString(),'Unplanned downtime (minutes)',tot.d?'bad':'ok')}${kpi(EF_SITES.filter(has).length+' of '+EF_SITES.length,'Sites with data')}</div>`;
+  const rows=EF_SITES.map(s=>{const o=A[s];if(!has(s))return `<tr><td>${s}</td><td colspan="5" class="nd">No data for this site</td></tr>`;const a=pv(o.q-o.d,o.q),m=pv(o.t,o.e);return `<tr><td>${s}</td><td>${o.io.toLocaleString()}</td><td>${o.nio?(o.io/o.nio).toFixed(1):'–'}</td><td class="${cls(m,tgM)}">${f2(m)}</td><td class="${cls(a,tgA)}">${f2(a)}</td><td>${o.d.toLocaleString()}</td></tr>`}).join('');
+  const heat=(t,fn,kind)=>`<section class="dc" style="grid-column:1/-1"><h3>${t}</h3><div class="wrapx"><table class="eft"><tr><th>Site</th>${ms.map(m=>`<th>${ml(m)}</th>`).join('')}</tr>${EF_SITES.map(s=>{const vals=ms.map(m=>fn(s,m)),mx=Math.max(1,...vals.filter(x=>x!==null));return `<tr><td>${s}</td>${vals.map(v=>kind==='io'?`<td style="background:color-mix(in srgb,var(--accent) ${v===null?0:Math.round(v/mx*45)}%,transparent)">${v===null?'–':v}</td>`:`<td class="${cls(v,kind==='av'?tgA:tgM)}">${f2(v)}</td>`).join('')}</tr>`}).join('')}</table></div></section>`;
+  const nts=R.filter(r=>r.nt&&ms.includes(r.m)).sort((a,b)=>a.m<b.m?-1:1),notes=nts.length?`<section class="dc" style="grid-column:1/-1"><h3>Notes</h3>${nts.map(r=>`<p><b>${ml(r.m)}, ${r.s}:</b> ${esc(r.nt)}</p>`).join('')}</section>`:'';
+  return kp+`<div class="dgrid"><section class="dc"><h3>Summary by site</h3><div class="wrapx"><table class="eft"><tr><th>Site</th><th>In-out</th><th>Average per month</th><th>Maintained</th><th>Availability</th><th>Downtime (min)</th></tr>${rows}</table></div></section><section class="dc"><h3>Entries and exits by site</h3>${bars(Object.fromEntries(EF_SITES.map(s=>[s,A[s].io])),EF_SITES)}</section>${heat('Entries and exits by month',cIo,'io')}${heat('Equipment maintained, % by month',cMt,'mt')}${heat('Service availability, % by month',cAv,'av')}${notes}${facCard(R,ms,A,f2,cls,pv,tgA,tgM)}</div>`;
+}
+function renderEff(){
+  const R=S.eff||(S.eff=[]),rg=effRange(),T=S.efft||{};
+  const mo=(id,v)=>`<select id="${id}">${rg.all.map(m=>`<option value="${m}"${m===v?' selected':''}>${ml(m)}</option>`).join('')}</select>`;
+  const rows=R.map((r,n)=>({r,n})).sort((a,b)=>(a.r.m||'')<(b.r.m||'')?1:(a.r.m||'')>(b.r.m||'')?-1:(a.r.s<b.r.s?-1:1)).map(({r,n})=>`<div class="rr" data-k="eff" data-n="${n}">${mfld('Month','m',r.m)}${sel('Site','s',EF_SITES,r.s)}${nfld('Entries and exits (count)','io',r.io)}${nfld('Unplanned downtime (minutes)','dt',r.dt)}${nfld('Support equipment (count)','eq',r.eq)}${nfld('Equipment maintained (count)','mt',r.mt)}${fld('Note','nt',r.nt||'','w')}<button class="btn" data-del="${n}" aria-label="Delete record">Delete</button></div>`).join('');
+  $('list').innerHTML=`<div class="tools"><span class="toast">Period</span>${mo('efrom',rg.from)}<span class="toast">to</span>${mo('eto',rg.to)}<label class="toast">Target availability %<input id="tgav" type="number" step="0.01" value="${esc(String(T.av===undefined?100:T.av))}"></label><label class="toast">Target maintenance %<input id="tgmt" type="number" step="0.01" value="${esc(String(T.mt===undefined?100:T.mt))}"></label><button class="btn" data-print="1">Print</button></div>
+<div id="effd">${effHtml()}</div>
+<h3 class="fh" style="margin-top:22px">Monthly records</h3>
+<p class="sub">One record per site per month. Required service time is every minute of the month (24 hours a day), as in your source file.</p>
+<div class="tools"><button class="btn pri" data-add="eff">Add record</button></div>${rows||'<div class="empty">No records yet.</div>'}`;
+}
+$('list').addEventListener('change',e=>{const i=e.target.id;if(i==='efrom'||i==='eto'){EFF[i==='efrom'?'from':'to']=e.target.value;$('effd').innerHTML=effHtml()}});
+$('list').addEventListener('input',e=>{const i=e.target.id;if(i==='tgav'||i==='tgmt'){S.efft=Object.assign({},S.efft,{[i==='tgav'?'av':'mt']:e.target.value});save();$('effd').innerHTML=effHtml()}});
+const OPN=new Set();
+document.addEventListener('toggle',e=>{const d=e.target;if(d&&d.dataset&&d.dataset.o){if(d.open)OPN.add(d.dataset.o);else OPN.delete(d.dataset.o)}},true);
+function nz(s){return String(s||'').toUpperCase().replace(/\s+/g,'')}
+function linkCheck(){
+  const C=S.changes||[],I=S.incidents||[],out=[],cById={};
+  C.forEach(c=>{if(c.id)cById[c.id]=c});
+  const cn=c=>'"'+(c.t||'Untitled change')+'"'+(c.no?' ('+c.no+')':''),inn=i=>'"'+(i.t||'Untitled incident')+'"'+(i.no?' ('+i.no+')':'');
+  const dup=(L,lab)=>{const m={};L.forEach(r=>{const k=nz(r.no);if(k)(m[k]=m[k]||[]).push(r)});Object.keys(m).forEach(k=>{if(m[k].length>1)out.push({lv:'bad',tx:lab+' number '+m[k][0].no+' is used by '+m[k].length+' records.'})})};
+  dup(C,'Change request');dup(I,'Incident');
+  C.forEach(c=>{const k=nz(c.no);if(k&&I.some(i=>nz(i.no)===k))out.push({lv:'bad',tx:'Change '+cn(c)+' and an incident have the same number. The two logs use separate series, HQ/CCB/CHN/... for changes and HQ/CCB/INC/... for incidents.'})});
+  C.forEach(c=>{if(c.no&&!/CHN/i.test(c.no))out.push({lv:'warn',tx:'Change '+cn(c)+': the request number should look like HQ/CCB/CHN/number/year.'})});
+  I.forEach(i=>{if(i.no&&!/INC/i.test(i.no))out.push({lv:'warn',tx:'Incident '+inn(i)+': the register number should look like HQ/CCB/INC/number/year.'})});
+  I.forEach(i=>{if(!i.cr)return;const c=cById[i.cr];if(!c)out.push({lv:'bad',tx:'Incident '+inn(i)+' is linked to a change that no longer exists.'});else if(i.no&&nz(c.inc)!==nz(i.no))out.push({lv:'warn',tx:'Incident '+inn(i)+' is linked to change '+cn(c)+', but that change cites incident no. '+(c.inc||'(blank)')+'.'})});
+  C.forEach((c,n)=>{if(!c.inc)return;const j=I.findIndex(x=>nz(x.no)===nz(c.inc));if(j<0)out.push({lv:'warn',tx:'Change '+cn(c)+' cites incident no. '+c.inc+', which is not in the incident log.'});else if(I[j].cr!==c.id)out.push({lv:'warn',tx:'Change '+cn(c)+' cites incident '+inn(I[j])+', but the incident is not linked back to the change.',fix:[n,j]})});
+  C.forEach(c=>{if(c.rin&&c.inc&&nz(c.rin)!==nz(c.inc))out.push({lv:'warn',tx:'Change '+cn(c)+': the incident notice number ('+c.rin+') differs from the incident number ('+c.inc+').'});
+    if(c.oc==='Successful'&&c.st!=='Closed')out.push({lv:'warn',tx:'Change '+cn(c)+': the outcome is Successful but the status is '+c.st+' (expected Closed).'});
+    if(c.oc==='Not successful'&&c.st!=='Failed')out.push({lv:'warn',tx:'Change '+cn(c)+': the outcome is Not successful but the status is '+c.st+' (expected Failed).'});
+    if(c.st&&c.st!=='Requested'&&c.st!=='Rejected'&&c.ar!=='Approved')out.push({lv:'warn',tx:'Change '+cn(c)+' has status '+c.st+' but its approval decision is '+(c.ar||'Pending')+'.'})});
+  I.forEach(i=>{if(i.st==='Closed'&&(!i.rc||!i.an))out.push({lv:'warn',tx:'Incident '+inn(i)+' is Closed without a root cause or an analyst (Part 4).'})});
+  return out;
+}
+function flowCard(){
+  const C=S.changes||[],I=S.incidents||[],cc=cnt(C,r=>r.st||'Requested'),ic=cnt(I,r=>r.st||'Reported'),cById={};
+  C.forEach(c=>{if(c.id)cById[c.id]=c});
+  const linked=I.filter(i=>i.cr&&cById[i.cr]),applied=linked.filter(i=>['Implemented','Closed'].includes(cById[i.cr].st)).length,none=I.length-linked.length;
+  const node=(x,y,l,n,h)=>`<g class="fn${n?' on':''}"><rect x="${x}" y="${y}" width="150" height="${h||54}" rx="8"/><text x="${x+75}" y="${y+(h||54)/2-2}" text-anchor="middle" class="fb">${n}</text><text x="${x+75}" y="${y+(h||54)/2+15}" text-anchor="middle" class="fl">${l}</text></g>`;
+  const ar=(x1,y1,x2,y2,d)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="fa${d?' dsh':''}" marker-end="url(#ah)"/>`;
+  let g=`<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--muted)"/></marker></defs><text x="15" y="18" class="lane">Incident (IT-FRM-008)</text><text x="15" y="178" class="lane">Change request (IT-FRM-006)</text>`;
+  IST.forEach((s,k)=>{g+=node(15+k*180,30,s,ic[s]||0);if(k<IST.length-1)g+=ar(165+k*180,57,195+k*180,57)});
+  [['Rejected',15],['Requested',195],['Approved',375],['Implemented',555],['Closed',735]].forEach(p=>{g+=node(p[1],190,p[0],cc[p[0]]||0)});
+  g+=ar(195,217,165,217)+ar(345,217,375,217)+ar(525,217,555,217)+ar(705,217,735,217)+node(555,268,'Failed',cc.Failed||0,50)+ar(630,244,630,268);
+  g+=ar(270,84,270,190,1)+`<text x="282" y="132" class="ft">${linked.length} linked to a change</text>`+ar(630,190,630,84,1)+`<text x="642" y="132" class="ft">${applied} fixed by a change</text>`;
+  const chk=linkCheck(),list=chk.length?chk.map(x=>`<div class="tr"><span class="badge" style="background:${x.lv==='bad'?'var(--s0)':'var(--s1)'};color:${x.lv==='bad'?'#fff':'#1a1a1a'}">${x.lv==='bad'?'Problem':'Check'}</span><span>${esc(x.tx)}${x.fix?' <button class="btn" data-fixlink="'+x.fix[0]+'|'+x.fix[1]+'">Link them</button>':''}</span></div>`).join(''):'<p>No problems found. Every change and incident link is consistent.</p>';
+  return `<section class="dc" style="grid-column:1/-1"><h3>Incident and change flow</h3><svg class="flow" viewBox="0 0 900 330" role="img" aria-label="Flow from incident to change request">${g}</svg><p>${I.length} incidents, ${C.length} change requests. ${none} incidents have no linked change.</p><h4>Link check (${chk.length})</h4>${list}</section>`;
+}
+$('list').addEventListener('click',e=>{const b=e.target.closest('[data-fixlink]');if(!b)return;const p=b.dataset.fixlink.split('|').map(Number),C=S.changes||[],I=S.incidents||[];if(C[p[0]]&&I[p[1]]){if(!C[p[0]].id)C[p[0]].id='c'+Date.now().toString(36);I[p[1]].cr=C[p[0]].id;save();renderReg()}});
+function toks(s){return String(s||'').split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean)}
+function pairState(c,i){const k=nz(i.no);return{cited:!!k&&toks(c.inc).some(t=>nz(t)===k),back:!!c.id&&i.cr===c.id}}
+function mapCard(){
+  const C=S.changes||[],I=S.incidents||[],chk=linkCheck(),nd=t=>`<span class="nd">${t}</span>`;
+  const tag=(c,i,n,j)=>{const p=pairState(c,i);return p.cited&&p.back?'<span class="ok">linked both ways</span>':p.cited?'<span class="bad">cited by the change only</span> '+(i.cr?nd('(the incident is linked to another change)'):'<button class="btn" data-fixlink="'+n+'|'+j+'">Link them</button>'):'<span class="bad">linked by the incident only</span> <button class="btn" data-fixcite="'+n+'|'+j+'">Add the number to the change</button>'};
+  const num=r=>esc(r.no||'(no number)');
+  const rows1=C.map((c,n)=>{
+    const js=[];I.forEach((i,j)=>{const p=pairState(c,i);if(p.cited||p.back)js.push(j)});
+    const miss=toks(c.inc).filter(t=>!I.some(i=>nz(i.no)===nz(t)));
+    const cell=js.map(j=>`<div><b>${num(I[j])}</b> ${esc(I[j].t||'')} ${nd('['+esc(I[j].st||'')+']')}<br>${tag(c,I[j],n,j)}</div>`).join('')+(miss.length?`<div class="bad">Not found in the incident log: ${esc(miss.join(', '))}</div>`:'')||nd('No related incident');
+    return `<tr><td><b>IT-FRM-006 (${num(c)}) relates to IT-FRM-008 (${js.map(j=>num(I[j])).join(', ')||'none'})</b></td><td>${esc(c.t||'')}<br>${nd(esc((c.st||'')+' \u00b7 '+(c.ty||'')))}</td><td>${cell}</td></tr>`}).join('');
+  const rows2=I.map((i,j)=>{
+    const cs=[];C.forEach((c,n)=>{const p=pairState(c,i);if(p.cited||p.back)cs.push(n)});
+    const cell=cs.map(n=>`<div><b>${num(C[n])}</b> ${esc(C[n].t||'')} ${nd('['+esc(C[n].st||'')+']')}<br>${tag(C[n],i,n,j)}</div>`).join('')||nd('No change request');
+    return `<tr><td><b>IT-FRM-008 (${num(i)}) relates to IT-FRM-006 (${cs.map(n=>num(C[n])).join(', ')||'none'})</b></td><td>${esc(i.t||'')}<br>${nd(esc((i.sv||'Not assessed')+' \u00b7 '+(i.st||'')))}</td><td>${cell}</td></tr>`}).join('');
+  const th=(a,b,c)=>`<tr><th>Mapping</th><th>${a}</th><th>${b}</th></tr>`;
+  const list=chk.length?chk.map(x=>`<div class="tr"><span class="badge" style="background:${x.lv==='bad'?'var(--s0)':'var(--s1)'};color:${x.lv==='bad'?'#fff':'#1a1a1a'}">${x.lv==='bad'?'Problem':'Check'}</span><span>${esc(x.tx)}</span></div>`).join(''):'<p>No problems found. Every number and link is consistent.</p>';
+  return `<section class="dc" style="grid-column:1/-1"><h3>Incident and change mapping</h3><p>${C.length} change requests (IT-FRM-006) and ${I.length} incidents (IT-FRM-008). A change cites its incidents in the "Incident no." field, which can hold several numbers; an incident points to its change with "Related change request".</p><h4>Change requests to incidents</h4><div class="wrapx"><table class="eft mp">${th('Change request','Related incidents')}${rows1||'<tr><td colspan="3">No change requests yet.</td></tr>'}</table></div><h4>Incidents to change requests</h4><div class="wrapx"><table class="eft mp">${th('Incident (priority, status)','Related change requests')}${rows2||'<tr><td colspan="3">No incidents yet.</td></tr>'}</table></div><h4>Link check (${chk.length})</h4>${list}</section>`;
+}
+$('list').addEventListener('click',e=>{const b=e.target.closest('[data-fixcite]');if(!b)return;const p=b.dataset.fixcite.split('|').map(Number),C=S.changes||[],I=S.incidents||[];if(C[p[0]]&&I[p[1]]&&I[p[1]].no){C[p[0]].inc=(C[p[0]].inc?C[p[0]].inc+', ':'')+I[p[1]].no;save();renderReg()}});
+const XS=['HQ data center','CCB 2','CCB 3','CCB 4','CCB 6'],YNP=['Pending','Approved','Not approved'];
+const XSPEC={
+ access:{no:'IT-FRM-003',title:'Request to enter the security controlled area',sec:[
+  {t:'Part 1: requester and persons',f:[['dt','Date of request','d'],['nm','Name','t'],['sn','Surname','t'],['eid','Employee ID','t'],['un','Unit','t'],['ph','Phone','t'],['tg','Area requested','s',XS],['vd','Date of entry','d'],['ps','Persons entering (one name per line, up to 6)','a'],['pu','Purpose','s',['Change (CHN)','Incident (INC)','Other']],['chn','Change request no. (CCB/CHN/number/year)','t'],['inc','Incident register no. (CCB/INC/number/year)','t'],['oth','Other purpose','a'],['md','Bringing data media, a laptop or other devices?','s',['No','Yes']],['ast','Asset in/out request no. (IT-FRM-005)','t'],['cs','Accepted the conditions and purposes','s',['Yes','No']]]},
+  {t:'Part 2: approver',f:[['co','Coordinator assigned','t'],['cr','Reason for assigning a coordinator','a'],['ar','Decision','s',YNP],['ap','Approver name','t'],['apos','Approver position','t'],['adt','Decision date','d']]},
+  {t:'Part 3: coordinator',f:[['rs','Result of the work','a'],['cn','Coordinator name','t'],['cd','Date','d']]}]},
+ assetio:{no:'IT-FRM-005',title:'Request to bring equipment and tools in or out of the controlled area',sec:[
+  {t:'Part 1: requester and items',f:[['rd','Request date','d'],['rq','Requester name','t'],['un','Unit','t'],['ph','Phone','t'],['em','Email','t'],['no','Request no. (HQ/CCB/ASSET/number/year)','t'],['tg','Site','s',XS],['ic','Number of information items','n']]},
+  {t:'Approval',f:[['ar','Approval of the movement','s',YNP],['ap','Approver name','t'],['apos','Approver position','t'],['adt','Date','d']]},
+  {t:'Coordinator check',f:[['ck','Check of assets and form','s',['Pending','Correct','Incorrect']],['cn','Coordinator name','t'],['cpos','Position','t'],['cdt','Date','d']]}]}
+};
+const td0=()=>new Date().toISOString().slice(0,10);
+NEW.access=()=>({dt:td0(),tg:'HQ data center',pu:'Change (CHN)',md:'No',cs:'Yes',ar:'Pending'});
+NEW.assetio=()=>({rd:td0(),tg:'HQ data center',ar:'Pending',ck:'Pending',it:[{c:'',n:'',p:'',d:'In',w:''}]});
+let XV='p',XF=false;
+function xfld(f,v,mode){const k=f[0],l=f[1],t=f[2],o=f[3],at=mode==='form'?`name="${k}"`:`data-f="${k}"`,val=esc(String(v==null?'':v));
+  if(t==='s')return `<label class="f">${l}<select ${at}>${opts(o,v||o[0])}</select></label>`;
+  if(t==='a')return `<label class="f w">${l}<textarea ${at} rows="3">${val}</textarea></label>`;
+  return `<label class="f">${l}<input type="${t==='d'?'date':t==='n'?'number':'text'}" ${at} value="${val}"></label>`}
+function xitems(r,n){const it=r.it||[];return `<div class="wrapx" style="flex:1 1 100%"><table class="eft mp"><tr><th>#</th><th>Asset code</th><th>Asset name</th><th>Purpose</th><th>In or out</th><th>Data wiped (taking out)</th><th></th></tr>${it.map((x,i)=>`<tr><td>${i+1}</td>${['c','n','p'].map(f=>`<td><input data-it="${i}" data-itf="${f}" value="${esc(x[f]||'')}"></td>`).join('')}<td><select data-it="${i}" data-itf="d">${opts(['In','Out'],x.d||'In')}</select></td><td><input data-it="${i}" data-itf="w" value="${esc(x.w||'')}"></td><td><button class="btn" data-xdel="${n}|${i}">Remove</button></td></tr>`).join('')}</table></div><button class="btn" data-xadd="${n}">Add item</button>`}
+function xrow(k,r,n){
+  const sp=XSPEC[k],all=[].concat(...sp.sec.map(s=>s.f)),top=k==='access'?['dt','tg','pu','ar']:['rd','tg','ar','ck'];
+  const F=f=>xfld(f,r[f[0]],'row'),dg=(t,h)=>`<details class="dd"${OPN.has(tab+k+n+t)?' open':''} data-o="${tab+k+n+t}"><summary>${t}</summary><div class="dg">${h}</div></details>`;
+  const cnt1=k==='access'?(String(r.ps||'').split(/\n/).filter(x=>x.trim()).length||1)+' person(s)':(r.it||[]).filter(x=>x.c||x.n).length+' item(s)';
+  let h=`<div class="rr" data-k="${k}" data-n="${n}">`+top.map(key=>F(all.find(f=>f[0]===key))).join('')+`<span class="badge" style="background:var(--accent);color:#fff">${cnt1}</span>`;
+  sp.sec.forEach((s,si)=>{let body=s.f.filter(f=>!top.includes(f[0])).map(F).join('');if(k==='assetio'&&si===0)body+=xitems(r,n);h+=dg(s.t,body)});
+  return h+`<button class="btn" data-del="${n}" aria-label="Delete request">Delete</button></div>`;
+}
+function xsum(){
+  const A=S.access||[],B=S.assetio||[],ms=[...new Set([...A.map(r=>(r.vd||r.dt||'').slice(0,7)),...B.map(r=>(r.rd||'').slice(0,7))].filter(Boolean))].sort();
+  if(!ms.length)return '';
+  const pc=r=>String(r.ps||'').split(/\n/).map(x=>x.trim()).filter(Boolean).length||1;
+  const cp=(s,m)=>A.filter(r=>r.tg===s&&(r.vd||r.dt||'').slice(0,7)===m&&r.ar!=='Not approved').reduce((t,r)=>t+pc(r),0);
+  const ca=(s,m,d)=>B.filter(r=>r.tg===s&&(r.rd||'').slice(0,7)===m&&r.ar!=='Not approved').reduce((t,r)=>t+(r.it||[]).filter(x=>x.d===d&&(x.c||x.n)).length,0);
+  const tb=(t,fn)=>`<section class="dc" style="grid-column:1/-1"><h3>${t}</h3><div class="wrapx"><table class="eft"><tr><th>Site</th>${ms.map(m=>`<th>${ml(m)}</th>`).join('')}<th>Total</th></tr>${XS.map(s=>{const v=ms.map(m=>fn(s,m));return `<tr><td>${s}</td>${v.map(x=>`<td>${x||'–'}</td>`).join('')}<td><b>${v.reduce((a,b)=>a+b,0)}</b></td></tr>`}).join('')}</table></div></section>`;
+  return `<div class="dgrid">${tb('Persons entering, by site and month (rejected requests excluded)',cp)}${tb('Equipment and tools brought in',(s,m)=>ca(s,m,'In'))}${tb('Equipment and tools taken out',(s,m)=>ca(s,m,'Out'))}</div>`;
+}
+function xref(k){
+  const A=S.access||[],B=S.assetio||[],C=S.changes||[],I=S.incidents||[],has=(L,f,v)=>!!v&&L.some(x=>nz(x[f])===nz(v));
+  const mk=(t,ok)=>t?`<span class="${ok?'ok':'bad'}">${esc(t)}${ok?'':' (not found)'}</span>`:'<span class="nd">none</span>';
+  let rows;
+  if(k==='access'){
+    rows=A.map(r=>{const w=[];if(r.pu==='Change (CHN)'&&!r.chn)w.push('Purpose is a change but no CHN number');if(r.pu==='Incident (INC)'&&!r.inc)w.push('Purpose is an incident but no INC number');if(r.md==='Yes'&&!r.ast)w.push('Devices brought in but no IT-FRM-005 number');
+      return `<tr><td>${esc((r.vd||r.dt||'')+' '+(r.tg||''))}<br>${esc((r.nm||'')+' '+(r.sn||''))}</td><td>${esc(r.pu||'')}</td><td>${mk(r.chn,has(C,'no',r.chn))}</td><td>${mk(r.inc,has(I,'no',r.inc))}</td><td>${(()=>{if(!r.ast||has(B,'no',r.ast))return mk(r.ast,true);const q=B.find(b=>(b.it||[]).some(x=>nz(x.c)===nz(r.ast)));return q?'<span class="bad">'+esc(r.ast)+' is an asset code, not a request number. Use '+esc(q.no||'(the request has no number yet)')+'.</span>':mk(r.ast,false)})()}</td><td>${w.length?'<span class="bad">'+esc(w.join('. '))+'</span>':'<span class="ok">OK</span>'}</td></tr>`}).join('');
+    return `<section class="dc" style="grid-column:1/-1;margin-bottom:12px"><h3>Cross-reference: person access (IT-FRM-003) to change, incident and equipment forms</h3><div class="wrapx"><table class="eft mp"><tr><th>Request</th><th>Purpose</th><th>Change request (IT-FRM-006)</th><th>Incident (IT-FRM-008)</th><th>Equipment form (IT-FRM-005)</th><th>Check</th></tr>${rows||'<tr><td colspan="6">No requests yet.</td></tr>'}</table></div></section>`;
+  }
+  rows=B.map(r=>{const a=A.filter(x=>r.no&&nz(x.ast)===nz(r.no)),c=C.filter(x=>r.no&&nz(x.ast)===nz(r.no));
+    return `<tr><td><b>${esc(r.no||'(no number)')}</b><br>${esc((r.rd||'')+' '+(r.tg||''))}</td><td>${a.length?a.map(x=>esc((x.vd||x.dt||'')+' '+(x.nm||'')+' '+(x.sn||''))).join('<br>'):'<span class="nd">none</span>'}</td><td>${c.length?c.map(x=>esc((x.no||'')+' '+(x.t||''))).join('<br>'):'<span class="nd">none</span>'}</td></tr>`}).join('');
+  return `<section class="dc" style="grid-column:1/-1;margin-bottom:12px"><h3>Cross-reference: equipment forms (IT-FRM-005) cited by other forms</h3><div class="wrapx"><table class="eft mp"><tr><th>Equipment request</th><th>Cited by person access (IT-FRM-003)</th><th>Cited by change request (IT-FRM-006)</th></tr>${rows||'<tr><td colspan="3">No requests yet.</td></tr>'}</table></div></section>`;
+}
+function renderAccess(){
+  const k=XV==='p'?'access':'assetio',sp=XSPEC[k],L=S[k]||(S[k]=[]);
+  const tabs=`<div class="tools"><button class="btn${XV==='p'?' pri':''}" data-xv="p">Persons (IT-FRM-003)</button><button class="btn${XV==='a'?' pri':''}" data-xv="a">Equipment and tools (IT-FRM-005)</button></div>`;
+  if(XF){
+    let body=sp.sec[0].f.map(f=>xfld(f,'','form')).join('');
+    if(k==='assetio')body+=`<h3 class="fh">Equipment and tools (up to 10 lines)</h3><div class="wrapx" style="flex:1 1 100%"><table class="eft mp"><tr><th>#</th><th>Asset code</th><th>Asset name</th><th>Purpose</th><th>In or out</th><th>Data wiped (taking out)</th></tr>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<tr><td>${i}</td><td><input name="c${i}"></td><td><input name="n${i}"></td><td><input name="p${i}"></td><td><select name="d${i}">${opts(['In','Out'],'In')}</select></td><td><input name="w${i}"></td></tr>`).join('')}</table></div><p class="sub" style="flex:1 1 100%;margin:0">Terms: equipment brought in or out must not damage the servers or other services. EXAT may suspend any asset that damages other assets.</p>`;
+    else body+=`<p class="sub" style="flex:1 1 100%;margin:0">Terms: the data is used for security reports and access control, and is kept for 5 years under IS-PCD-001 and IS-PCD-004. Parts 2 and 3 (approval and coordinator) are completed in the log after submitting.</p>`;
+    $('list').innerHTML=tabs+`<form class="frm" id="xfrm"><h2>${sp.no}: ${sp.title}</h2>${body}<div class="acts"><button class="btn pri" type="submit">Submit to log</button><button class="btn" type="button" data-xcancel="1">Cancel</button></div></form>`;
+    return;
+  }
+  const key=r=>r.vd||r.dt||r.rd||'',rows=L.map((r,n)=>({r,n})).sort((a,b)=>key(a.r)<key(b.r)?1:-1).map(o=>xrow(k,o.r,o.n)).join('');
+  $('list').innerHTML=tabs+`<div class="tools"><button class="btn pri" data-xform="1">${XV==='p'?'New person access request (IT-FRM-003)':'New equipment and tools request (IT-FRM-005)'}</button></div><p class="sub">${L.length} requests. Counts below feed the entries and exits reported on the Effectiveness tab.</p>${xsum()}${xref(k)}${rows||'<div class="empty">No requests yet.</div>'}`;
+}
+$('list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||tab!=='X')return;const d=b.dataset;
+  if(d.xv){XV=d.xv;XF=false;renderReg()}else if(d.xform){XF=true;renderReg()}else if(d.xcancel){XF=false;renderReg()}
+  else if(d.xadd){S.assetio[+d.xadd].it.push({c:'',n:'',p:'',d:'In',w:''});save();renderReg()}
+  else if(d.xdel){const p=d.xdel.split('|').map(Number);S.assetio[p[0]].it.splice(p[1],1);save();renderReg()}});
+$('list').addEventListener('input',e=>{const el=e.target;if(!el.dataset.itf)return;const r=el.closest('.rr');if(!r)return;const o=(S.assetio||[])[+r.dataset.n];if(o&&o.it&&o.it[+el.dataset.it]){o.it[+el.dataset.it][el.dataset.itf]=el.value;save()}});
+$('list').addEventListener('submit',e=>{if(e.target.id!=='xfrm')return;const k=XV==='p'?'access':'assetio',o=Object.fromEntries(new FormData(e.target).entries()),rec=Object.assign(NEW[k](),o);
+  if(k==='assetio'){rec.it=[];for(let i=1;i<=10;i++){if(o['c'+i]||o['n'+i])rec.it.push({c:o['c'+i]||'',n:o['n'+i]||'',p:o['p'+i]||'',d:o['d'+i]||'In',w:o['w'+i]||''});['c','n','p','d','w'].forEach(x=>delete rec[x+i])}if(!rec.it.length)rec.it=[{c:'',n:'',p:'',d:'In',w:''}]}
+  (S[k]=S[k]||[]).push(rec);save();XF=false;renderReg()});
+function facCard(R,ms,A,f2,cls,pv,tgA,tgM){
+  const F=S.fac;if(!F||!F.sites)return '';
+  const last=s=>{const rs=R.filter(r=>r.s===s&&ms.includes(r.m)&&nn(r.eq)!==null).sort((a,b)=>a.m<b.m?1:-1);return rs.length?nn(rs[0].eq):null};
+  let tn=0,te=0;const diffs=[],adj=[];
+  const rows=F.sites.map(x=>{const o=A[x.s]||{},e=last(x.s),mt=pv(o.t||0,o.e||0),av=pv((o.q||0)-(o.d||0),o.q||0),df=e===null?null:x.n-e;tn+=x.n;if(x.n0&&x.n0!==x.n)adj.push(x.s+': the facility file listed '+x.n0+' items; '+x.n+' is confirmed correct, as in the monthly records');if(e!==null)te+=e;if(df)diffs.push(x.s+' lists '+x.n+' items but the monthly records count '+e);
+    return `<tr><td>${x.s}</td><td>${x.n}</td><td>${e===null?'\u2013':e}</td><td class="${df?'bad':df===0?'ok':'nd'}">${df===null?'\u2013':(df>0?'+':'')+df}</td><td class="${cls(mt,tgM)}">${f2(mt)}</td><td class="${cls(av,tgA)}">${f2(av)}</td><td style="white-space:normal;text-align:left">${esc(x.d)}</td></tr>`}).join('');
+  const hq=F.hq||[],note=(diffs.length?`<p class="bad">Check: ${esc(diffs.join('; '))}.</p>`:'<p class="ok">The facility list agrees with the monthly records.</p>')+(adj.length?`<p class="nd">${esc(adj.join('. '))}.</p>`:'');
+  return `<section class="dc" style="grid-column:1/-1"><h3>Facility summary: data center support equipment</h3><div class="wrapx"><table class="eft"><tr><th>Site</th><th>Items in facility list</th><th>Items in monthly records</th><th>Difference</th><th>Maintained</th><th>Availability</th><th style="text-align:left">Facilities</th></tr>${rows}<tr><td><b>Total</b></td><td><b>${tn}</b></td><td><b>${te}</b></td><td></td><td></td><td></td><td></td></tr></table></div>${note}</section><section class="dc wide"><h3>HQ facility items by system (${hq.length})</h3>${bars(cnt(hq,r=>r.sys))}</section><section class="dc wide"><h3>HQ facility items by room</h3>${bars(cnt(hq,r=>r.room))}</section>`;
+}
+function renderProc(){
+  if(PRN!==null)return tab==='I'?renderPrintInc():renderPrint();if(FORM)return renderForm();
+  const ch=tab==="H",k=ch?"changes":"incidents",L=S[k]||(S[k]=[]),SL=ch?CST:IST;
+  const steps=ch?['Part 1: request, with urgency and impact','Part 2: approval (division director or above for Emergency and Major)','Part 3: implement and record the result','Part 4: report the outcome and check services','Part 5: software details, if installing software']:['Part 1: record the report and the event type','Part 2: assess urgency and impact, approve the handling plan','Part 3: summarise the result and link any change request','Part 4: analyse the root cause and prevention'];
+  const open=L.filter(r=>r.st!=='Closed'&&r.st!=='Rejected').length;
+  let h=`<ol class="steps">${steps.map(s=>`<li>${s}</li>`).join("")}</ol><div class="tools"><button class="btn pri" data-form="1">${ch?"New change request form":"New incident report form"}</button><button class="btn" data-add="${k}">Quick add row</button></div><p class="sub">${L.length} logged, ${open} open. ${ch?"Supports Annex A 8.32.":"Supports Annex A 5.24 to 5.28 and 6.8."}</p>`;
+  h+=L.map((r,n)=>{
+    const b=`<div class="rr" data-k="${k}" data-n="${n}" style="border-left-color:${stc(SL,r.st)}">`,x=`<button class="btn" data-del="${n}" aria-label="Delete entry">Delete</button></div>`;
+    return ch?chgRow(r,n,b,x)
+    :incRow(r,n,b,x)}).join("");
+  if(!L.length)h+=`<div class="empty">${ch?"No changes logged yet.":"No incidents reported yet."}</div>`;
+  $("list").innerHTML=h;
+}
+function cnt(L,f){const o={};L.forEach(r=>{const k=f(r)||'Unset';o[k]=(o[k]||0)+1});return o}
+function bars(o,order,col){const ks=order||Object.keys(o),m=Math.max(1,...ks.map(k=>o[k]||0));return ks.map(k=>`<div class="th"><span>${esc(k)}</span><div class="bar"><i style="width:${(o[k]||0)/m*100}%;background:${(col&&col[k])||'var(--accent)'}"></i></div><span>${o[k]||0}</span></div>`).join('')}
+function renderDash(){
+  const A=S.assets||[],R=S.risks||[],C=S.changes||[],I=S.incidents||[];
+  const soa={n:0,na:0,s:[0,0,0]},th={};
+  DATA.A.forEach(c=>{const v=get('A',c.id),g=th[c.g]||(th[c.g]={n:0,d:0,p:0});if(!v.a){soa.na++;return}soa.n++;soa.s[v.s]++;g.n++;if(v.s==2)g.d++;else if(v.s==1)g.p++});
+  let cl=0,clN=0;DATA.C.forEach(c=>{const v=get('C',c.id);if(v.a){clN++;if(v.s==2)cl++}});
+  const pct=soa.n?Math.round(soa.s[2]/soa.n*100):0;
+  const lv=cnt(R,r=>RL(r.l*r.i)[0]),top=R.slice().sort((a,b)=>b.l*b.i-a.l*a.i).slice(0,5);
+  const openC=C.filter(r=>r.st!=='Closed'&&r.st!=='Rejected').length,openI=I.filter(r=>r.st!=='Closed'),hi=openI.filter(r=>r.sv==='High'||r.sv==='Urgent'||r.sv==='Critical').length,pend=I.filter(r=>r.nt==='Required, pending').length;
+  const rc={Extreme:'#8b1a10',High:'var(--s0)',Moderate:'var(--s1)',Low:'var(--s2)','Very low':'var(--na)'},sev={Low:'var(--s2)',Medium:'var(--s1)',High:'var(--s0)',Urgent:'#8b1a10',Critical:'#8b1a10'};
+  const kpi=(n,l)=>`<div class="kpi"><b>${n}</b>${l}</div>`;
+  const card=(t,b)=>`<section class="dc"><h3>${t}</h3>${b}</section>`;
+  const themes=Object.entries(th).map(([g,v])=>`<div class="th"><span>${esc(g)}</span><div class="bar"><i style="width:${v.n?v.d/v.n*100:0}%;background:var(--s2)"></i><i style="width:${v.n?v.p/v.n*100:0}%;background:var(--s1)"></i></div><span>${v.d}/${v.n}</span></div>`).join('');
+  const map=[['A','Annex A controls (SoA)',soa.n+' applicable'],['C','Clauses 4–10',clN+' requirements'],['Z','Assets',A.length+' assets'],['R','Risk register',R.length+' risks'],['H','Change management',openC+' open'],['I','Incidents',openI.length+' open'],['S','Schedule',(S.events||[]).length+' events'],['E','Effectiveness',(S.eff||[]).length+' records'],['X','Access',(S.access||[]).length+' persons, '+(S.assetio||[]).length+' equipment']];
+  $('list').innerHTML=`<div class="tools"><button class="btn" data-print="1">Print dashboard</button></div>
+<p class="sub">ISMS status report, ${new Date().toISOString().slice(0,10)}. Figures update as the team edits.</p>
+<div class="kpis">${kpi(A.length,'Assets in inventory')}${kpi(pct+'%','Annex A implemented')}${kpi((lv.High||0)+(lv.Extreme||0),'High or extreme risks')}${kpi(openC,'Open changes')}${kpi(openI.length,'Open incidents')}</div>
+<div class="dgrid">
+${card('Inventory report',`<h4>By office</h4>${bars(cnt(A,r=>r.of||'Back Office'),OF)}<h4>By type</h4>${bars(cnt(A,r=>r.y),TY)}<h4>By classification</h4>${bars(cnt(A,r=>r.k),CL,{Restricted:'var(--s0)',Confidential:'var(--s1)'})}<h4>By location</h4>${topBars(cnt(A,r=>(r.lo||'').trim()||'No location'),8)}`)}
+${card('SoA report',`<h4>Status of applicable controls (${soa.n})</h4>${bars({'Not started':soa.s[0],'In progress':soa.s[1],'Implemented':soa.s[2]},['Not started','In progress','Implemented'],{'Not started':'var(--s0)','In progress':'var(--s1)','Implemented':'var(--s2)'})}<p>${soa.na} controls marked not applicable. Clauses 4–10: ${cl} of ${clN} met.</p><h4>By theme</h4>${themes}`)}
+${card('Risk report',`<h4>By office</h4>${bars(cnt(R,r=>r.of||'Back Office'),OF)}<h4>By level</h4>${bars(lv,RLV,rc)}<h4>By treatment</h4>${bars(cnt(R,r=>r.tr),TR)}<h4>Top risks</h4>${top.length?top.map(r=>{const s=r.l*r.i,x=RL(s);return `<div class="tr"><span class="badge" style="background:${x[1]}">${x[0]} ${s}</span><span>${esc(r.t||'Untitled risk')}</span></div>`}).join(''):'<p>No risks logged yet.</p>'}`)}
+${card('Change report',`<h4>By status</h4>${bars(cnt(C,r=>r.st),CST)}<h4>By type</h4>${bars(cnt(C,r=>r.ty),['Emergency','Major','Minor'],{Emergency:'var(--s0)',Major:'var(--s1)'})}<p>${C.length} total, ${openC} open.</p>`)}
+${card('Incident report',`<h4>By priority</h4>${bars(cnt(I,r=>r.sv),['Urgent','High','Medium','Low'],sev)}<h4>By status</h4>${bars(cnt(I,r=>r.st),IST)}<p>${hi} open urgent or high. ${pend} with notification pending.</p>`)}
+${mapCard()}
+${card('Site map',`<div class="sm">${map.map(m=>`<button data-go="${m[0]}"><b>${m[1]}</b>${m[2]}</button>`).join('')}</div>`)}
+</div>`;
+}
+$('list').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;const t=document.querySelector('.tabs button[data-tab="'+b.dataset.go+'"]');if(t)t.click()});
+const EK=['Management review','Internal audit','External audit','Training course'],ES=['Planned','In progress','Done','Cancelled'];
+const EC={'Management review':'#0f766e','Internal audit':'#d99a1a','External audit':'#b42318','Training course':'#5b6fd6'},EX={'Internal audit':'#1a1a1a'};
+NEW.events=()=>({t:'',k:'Management review',d:'',st:'Planned',o:'',sc:''});
+let YR=new Date().getFullYear();
+function renderSched(){
+  const L=S.events||(S.events=[]),today=new Date().toISOString().slice(0,10),MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const act=r=>r.st==='Planned'||r.st==='In progress';
+  const up=L.filter(r=>r.d&&r.d>=today&&act(r)).sort((a,b)=>a.d<b.d?-1:1),late=L.filter(r=>r.d&&r.d<today&&act(r)).length;
+  const inY=L.filter(r=>r.d&&r.d.slice(0,4)===String(YR)),cm=today.slice(0,4)===String(YR)?+today.slice(5,7):0;
+  const chip=(k,t)=>`<span class="chip" style="background:${EC[k]};color:${EX[k]||'#fff'}">${t}</span>`;
+  const lane=k=>`<div class="tlh">${k}</div>`+MO.map((m,i)=>`<div class="tlc${i+1===cm?' now':''}">${inY.filter(r=>r.k===k&&+r.d.slice(5,7)===i+1).map(r=>`<span class="chip${r.st==='Done'?' done':''}${r.st==='Cancelled'?' off':''}" style="background:${EC[k]};color:${EX[k]||'#fff'}" title="${esc(r.d+' '+(r.t||k)+' ('+r.st+')')}">${r.d.slice(8,10)} ${esc((r.t||k).slice(0,16))}</span>`).join('')}</div>`).join('');
+  const rows=L.map((r,n)=>({r,n})).sort((a,b)=>(a.r.d||'9')<(b.r.d||'9')?-1:1).map(({r,n})=>`<div class="rr" data-k="events" data-n="${n}" style="border-left-color:${EC[r.k]||'var(--na)'}">${fld('Title','t',r.t,'w')}${sel('Type','k',EK,r.k)}${dfld('Date','d',r.d)}${sel('Status','st',ES,r.st)}${fld('Responsible (reviewer, auditor or trainer)','o',r.o)}${fld('Scope, agenda or audience','sc',r.sc,'w')}<button class="btn" data-del="${n}" aria-label="Delete event">Delete</button></div>`).join('');
+  $('list').innerHTML=`<div class="tools"><button class="btn" data-yr="-1">Previous year</button><strong style="align-self:center">${YR}</strong><button class="btn" data-yr="1">Next year</button><button class="btn pri" data-add="events">Add event</button><button class="btn" data-seed="1">Add standard annual plan</button></div>
+<p class="sub">${late} overdue. ${up[0]?'Next: '+esc(up[0].t||up[0].k)+' on '+up[0].d+'.':'Nothing upcoming is scheduled.'} Supports clauses 7.2, 9.2 and 9.3 and the certification cycle.</p>
+<div class="lg">${EK.map(k=>chip(k,k)).join('')}</div>
+<div class="tlw"><div class="tl"><div class="tlh"></div>${MO.map((m,i)=>`<div class="tlh${i+1===cm?' now':''}">${m}</div>`).join('')}${EK.map(lane).join('')}</div></div>
+${rows||'<div class="empty">No events yet. Add an event, or load the standard annual plan.</div>'}`;
+}
+$('list').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b||tab!=='S')return;
+  if(b.dataset.yr){YR+=+b.dataset.yr;renderReg()}
+  else if(b.dataset.seed){
+    [['03-15','Training course','Information security awareness training','All staff'],['06-15','Management review','Management review (mid-year)','Top management'],['09-15','Internal audit','Internal ISMS audit','Annex A controls and clauses 4-10'],['10-15','Management review','Management review (annual)','Top management'],['11-15','External audit','Certification or surveillance audit','Certification body']]
+    .forEach(p=>(S.events=S.events||[]).push(Object.assign(NEW.events(),{d:YR+'-'+p[0],k:p[1],t:p[2],sc:p[3]})));
+    save();renderReg();
+  }
+});
+function renderReg(){
+  if(tab==="X")return renderAccess();
+  if(tab==="E")return renderEff();
+  if(tab==="S")return renderSched();
+  if(tab==="D")return renderDash();
+  if(tab==="H"||tab==="I")return renderProc();
+  const risk=tab==="R",k=risk?"risks":"assets",L=S[k]||(S[k]=[]);
+  let h=`<div class="tools"><button class="btn" data-add="${k}">${risk?"Add risk":"Add asset"}</button><select id="ofs" aria-label="Filter by office"><option value="">All offices</option><option${OFS==='Back Office'?' selected':''}>Back Office</option><option${OFS==='Front Office'?' selected':''}>Front Office</option></select>${risk?"":`<input id="aq" type="search" placeholder="Search ${L.length} assets by name, group, location or owner" value="${esc(AQ)}" aria-label="Search assets">`}<span class="toast">${(()=>{const c=cnt(L,r=>r.of||'Back Office');return (c['Back Office']||0)+' back office, '+(c['Front Office']||0)+' front office'})()}</span></div>`;
+  if(risk){const c=cnt(L,r=>RL(r.l*r.i)[0]);
+    h+=`<p class="sub">${L.length} risks. ${RLV.map(x=>x+': '+(c[x]||0)).join(', ')}. Score is likelihood times impact, with levels from your criteria: very low 1 to 2, low 3 to 4, moderate 5 to 9, high 10 to 16, extreme 20 to 25.</p>`}
+  h+=L.map((r,n)=>{
+    if(OFS&&(r.of||'Back Office')!==OFS)return '';
+    if(!risk&&AQ&&![r.n,r.gr,r.gd,r.lo,r.o,r.y,r.sn].join(' ').toLowerCase().includes(AQ.toLowerCase()))return '';
+    if(risk){const s=r.l*r.i,lv=RL(s);
+      return `<div class="rr" data-k="${k}" data-n="${n}" style="border-left-color:${lv[1]}">${fld("Risk (what could go wrong)","t",r.t,"w")}${sel("Office","of",OF,r.of||'Back Office')}${fld("Asset affected","a",r.a)}${sel("Likelihood","l",N5,r.l)}${sel("Impact","i",N5,r.i)}<span class="badge" style="background:${lv[1]}">${lv[0]} ${s}</span>${sel("Treatment","tr",TR,r.tr)}${fld("Annex A controls","c",r.c)}${fld("Risk owner","ow",r.ow||'')}${fld("Residual risk (for example M6)","rr",r.rr||'')}${fld("Risk treatment plan no.","rtp",r.rtp||'')}${fld("Existing controls","ex",r.ex||'',"w")}${fld("Security impact (C, I, A)","cia",r.cia||'')}<button class="btn" data-del="${n}" aria-label="Delete risk">Delete</button></div>`}
+    return `<div class="rr" data-k="${k}" data-n="${n}">${fld("Asset name","n",r.n,"w")}${sel("Type","y",TY,r.y)}${fld("Owner","o",r.o)}${fld("Location (site, building, room)","lo",r.lo||'')}${sel("Classification","k",CL,r.k)}${sel("Office","of",OF,r.of||'Back Office')}${fld("Asset group (type of asset)","gr",r.gr||'')}${fld("Group detail","gd",r.gd||'',"w")}${fld("Serial number","sn",r.sn||'')}${fld("Operating system","os",r.os||'')}${fld("Note","nt",r.nt||'')}<button class="btn" data-del="${n}" aria-label="Delete asset">Delete</button></div>`}).join("");
+  if(!L.length)h+=`<div class="empty">${risk?"No risks yet. Add the first risk to start your register.":"No assets yet. Add the first asset to start your inventory."}</div>`;
+  $("list").innerHTML=h;
+}
+$("list").addEventListener("input",e=>{
+  const el=e.target,r=el.closest(".rr");if(!r||!el.dataset.f)return;
+  const f=el.dataset.f,o=S[r.dataset.k][+r.dataset.n];o[f]=(f==="l"||f==="i")?+el.value:el.value;if(r.dataset.k==='changes')autoChg(o,f);else if(r.dataset.k==='incidents')autoInc(o,f);else if(r.dataset.k==='eff'&&$('effd'))$('effd').innerHTML=effHtml();save();
+  if(el.tagName==="SELECT")renderReg();
+});
+$("list").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  const r=b.closest(".rr");
+  if(b.dataset.add){const k=b.dataset.add;(S[k]=S[k]||[]).push(NEW[k]());save();renderReg()}
+  else if(b.dataset.del&&r){S[r.dataset.k].splice(+r.dataset.n,1);save();renderReg()}
+});
+let AQ='',OFS='';
+const OF=['Back Office','Front Office'];
+$('list').addEventListener('change',e=>{if(e.target.id==='ofs'){OFS=e.target.value;renderReg()}});
+$('list').addEventListener('input',e=>{if(e.target.id!=='aq')return;AQ=e.target.value;renderReg();const q=$('aq');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}});
+function topBars(o,n){const e=Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,n);return bars(Object.fromEntries(e),e.map(x=>x[0]))+(Object.keys(o).length>n?'<p>Top '+n+' of '+Object.keys(o).length+' locations.</p>':'')}
+function cj(v){return JSON.stringify(v,(k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.keys(x).sort().reduce((o,y)=>(o[y]=x[y],o),{}):x)}
+function makeRef(db){
+  const BIG={assets:'isms_assets',risks:'isms_risks'},CH=50,main=db.doc('isms/state'),wc={assets:{},risks:{}},hv={assets:0,risks:0};
+  const nm=i=>'c'+String(i).padStart(3,'0');
+  async function wbig(k,rows){
+    const col=db.collection(BIG[k]),w=wc[k],n=Math.ceil(rows.length/CH),ps=[];
+    for(let i=0;i<n;i++){const part=rows.slice(i*CH,(i+1)*CH),j=cj(part),id=nm(i);if(w[id]!==j)ps.push(col.doc(id).set({rows:part}).then(()=>{w[id]=j}))}
+    for(let i=n;i<hv[k];i++)ps.push(col.doc(nm(i)).delete().then(()=>{delete w[nm(i)]}));
+    await Promise.all(ps);hv[k]=n;
+  }
+  return{
+    async update(ch){const m={};for(const k of Object.keys(ch)){if(BIG[k])await wbig(k,ch[k]||[]);else m[k]=ch[k]}if(Object.keys(m).length)await main.update(m)},
+    async set(all){const m={};Object.keys(all).forEach(k=>{if(!BIG[k])m[k]=all[k]});await main.set(m);for(const k of Object.keys(BIG))await wbig(k,all[k]||[])},
+    onSnapshot(cb,err){
+      const P={};
+      const fire=()=>{
+        if(!P.main||!P.assets||!P.risks)return;
+        const d=Object.assign({},P.main.exists?P.main.data():{});
+        Object.keys(BIG).forEach(k=>{if(P[k].length)d[k]=P[k]});
+        cb({exists:P.main.exists||P.assets.length>0||P.risks.length>0,data:()=>d});
+      };
+      main.onSnapshot(s=>{P.main=s;fire()},err);
+      Object.keys(BIG).forEach(k=>db.collection(BIG[k]).onSnapshot(s=>{
+        const ds=s.docs.slice().sort((a,b)=>a.id<b.id?-1:1);
+        wc[k]={};hv[k]=ds.length;P[k]=[];
+        ds.forEach(x=>{const rows=(x.data()||{}).rows||[];wc[k][x.id]=cj(rows);P[k]=P[k].concat(rows)});
+        fire();
+      },err));
+    }
+  };
+}
+render();
+(async()=>{
+  try{
+    if(!window.claude)return;
+    const db=await claude.use("db");
+    if(!db)return;
+    REF=makeRef(db);
+    REF.onSnapshot(s=>{
+      if(!s.exists){
+        if(Object.keys(S).length&&!busy()){REF.set(JSON.parse(JSON.stringify(S))).then(()=>{last={};Object.keys(S).forEach(k=>last[k]=cj(S[k]))}).catch(()=>{})}
+        setStatus("Saved to shared database");return;
+      }
+      if(busy())return;
+      applyRemote(s.data());setStatus("Saved to shared database");
+    },()=>{REF=null;setStatus("Database unavailable. Saved in this browser only.")});
+  }catch(e){REF=null}
+})();
+</script>
+</body>
+</html>
