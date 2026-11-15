@@ -122,19 +122,19 @@ svg text{fill:#94a3b8;font-family:Sarabun,sans-serif}
 <header>
   <div>
     <h1><img id="hLogo" class="hlogo" alt="EXAT">Data Center <span>Cold Containment</span> - Realistic 3D Dashboard</h1>
-    <div class="sub">HQ ศูนย์ควบคุมทางพิเศษ (27 ชั้น · DC ชั้น 6) · CCB2 · CCB3 · CCB4 · CCB6 (6 ชั้น · DC ชั้น 5)</div>
+    <div class="sub">HQ ศูนย์ควบคุมทางพิเศษ (27 ชั้น · DC ชั้น 6 · Facility ชั้น 2) · CCB2 · CCB3 · CCB4 · CCB6 (6 ชั้น · DC ชั้น 5)</div>
   </div>
   <div class="ctrl">
     <select id="period"></select>
     <button id="bLbl" class="on">🏷 ป้ายข้อมูล</button>
     <button id="bAir" class="on">🌬 Airflow</button>
     <button id="bX">X-Ray</button>
-    <button id="bOpen">แยกชั้น DC</button>
+    <button id="bOpen">แยกชั้นอาคาร</button>
     <button id="bAuto">หมุนอัตโนมัติ</button>
     <button id="bTour">▶ โหมดนำเสนอ</button>
     <button id="bReset">รีเซ็ตมุมมอง</button>
     <button id="bDay">🌙 กลางคืน</button>
-    <button onclick="document.location='https://claude.ai/artifact/N3mUxp6pc6BTyEpziMafdd'">🛡 ISMS Tracker</button>
+    <button onclick="alert('ISMS Tracker (ระบบทดสอบ)')">🛡 ISMS Tracker</button>
     <div class="sync">
       <i class="led" id="sLed"></i><span id="sTxt">ข้อมูลตั้งต้น (ยังไม่เชื่อม)</span>
       <button id="sLink" title="เลือกไฟล์ Excel เพื่ออัปเดตอัตโนมัติ">📊 เชื่อม Excel</button>
@@ -157,10 +157,10 @@ svg text{fill:#94a3b8;font-family:Sarabun,sans-serif}
 
 <section class="main">
   <div class="card">
-    <h3><span>มุมมอง 3D Perspective - อาคารและชั้น Data Center</span><span id="selName" class="sub"></span></h3>
+    <h3><span>มุมมอง 3D Perspective - อาคารและชั้นอุปกรณ์สนับสนุน</span><span id="selName" class="sub"></span></h3>
     <div id="viewport">
       <div class="loading" id="loading">กำลังโหลดโมเดล 3D ... (ต้องเชื่อมต่ออินเทอร์เน็ต)</div>
-      <div class="hint">ลากซ้าย = หมุน · ลากขวา = เลื่อน · Scroll = ซูม · คลิกอาคาร = เปิดชั้น Data Center</div>
+      <div class="hint">ลากซ้าย = หมุน · ลากขวา = เลื่อน · Scroll = ซูม · คลิกอาคาร = เปิดดูผังห้องและอุปกรณ์ภายใน</div>
       <div class="legend">
         <span><i style="background:#38bdf8"></i>ลมเย็น (Cold aisle)</span>
         <span><i style="background:#ef4444"></i>ลมร้อน (Hot aisle)</span>
@@ -206,9 +206,9 @@ const TM={'ม.ค.':1,'ก.พ.':2,'มี.ค.':3,'เม.ย.':4,'พ.ค.':5
 const dim=l=>{const m=String(l).trim().match(/^(.+?)(\d{2})$/);return m&&TM[m[1]]?new Date(2500+ +m[2]-543,TM[m[1]],0).getDate():30;};
 let M=['ต.ค.68','พ.ย.68','ธ.ค.68','ม.ค.69','ก.พ.69','มี.ค.69','เม.ย.69','พ.ค.69','มิ.ย.69','ก.ค.69','ส.ค.69'];
 let DAYS=M.map(dim);
-/* p = ตำแหน่งในฉาก (เมตร) · fl = จำนวนชั้น · dc = ชั้น Data Center */
+/* p = ตำแหน่งในฉาก (เมตร) · fl = จำนวนชั้น · dc = ชั้น Data Center · fac = ชั้น Facility อื่นๆ */
 const S={
-  HQ:  {name:'HQ ศูนย์ควบคุมทางพิเศษ',col:'#38bdf8',p:[0,-40],fl:27,dc:6,acc:[190,180,142,259,236,300,230,287,342,292,null]},
+  HQ:  {name:'HQ ศูนย์ควบคุมทางพิเศษ',col:'#38bdf8',p:[0,-40],fl:27,dc:6,fac:2,acc:[190,180,142,259,236,300,230,287,342,292,null]},
   CCB2:{name:'CCB2',col:'#a78bfa',p:[-150,-85],fl:6,dc:5,acc:[3,11,1,4,8,42,3,21,9,6,6]},
   CCB3:{name:'CCB3',col:'#f472b6',p:[150,-85],fl:6,dc:5,acc:[28,20,15,12,23,30,21,34,24,26,29]},
   CCB4:{name:'CCB4',col:'#34d399',p:[-150,105],fl:6,dc:5,acc:[18,18,16,14,19,18,10,22,16,25,14]},
@@ -307,7 +307,7 @@ TX.band=cvs(64,128,(g,w,h)=>{g.fillStyle='#f3f5f7';g.fillRect(0,0,w,h);const gr=
 TX.bandE=lit(0,0,1,.55,.5);
 TX.crown=cvs(256,128,(g,w,h)=>{const gr=g.createLinearGradient(0,h,0,0);gr.addColorStop(0,'#3f7fc0');gr.addColorStop(1,'#a8d4f2');g.fillStyle=gr;g.fillRect(0,0,w,h);g.strokeStyle='rgba(255,255,255,.35)';for(let y=0;y<h;y+=8){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke();}for(let x=0;x<w;x+=16){g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke();}});
 
-/* โลโก้ EXAT: ถนนโค้งสีน้ำเงิน + แถบแดง + ตัวอักษร EXAT (วาดตามภาพต้นฉบับ) */
+/* โลโก้ EXAT: ถนนโค้งสีน้ำเงิน + แถบแดง + ตัวอักษร EXAT */
 function drawExat(g,w,h){
   g.clearRect(0,0,w,h);g.fillStyle='#ffffff';g.beginPath();g.roundRect(4,4,w-8,h-8,28);g.fill();
   g.save();g.translate(30,0);
@@ -322,14 +322,6 @@ function drawExat(g,w,h){
 }
 TX.logo=cvs(512,420,drawExat);
 const setHeaderLogo=()=>{const e=$('hLogo');if(e)e.src=TX.logo.image.toDataURL();};setHeaderLogo();
-// ถ้ามีไฟล์ exat-logo.png ในโฟลเดอร์เดียวกัน และเปิดผ่าน http:// จะใช้ภาพจริงแทนภาพที่วาด
-(()=>{const im=new Image();im.onload=()=>{try{
-  const c=document.createElement('canvas');c.width=512;c.height=420;const g=c.getContext('2d');
-  g.fillStyle='#fff';g.beginPath();g.roundRect(4,4,504,412,28);g.fill();
-  const s=Math.min(480/im.width,388/im.height);g.drawImage(im,(512-im.width*s)/2,(420-im.height*s)/2,im.width*s,im.height*s);
-  g.getImageData(0,0,1,1);   // ทดสอบสิทธิ์ (เปิดแบบ file:// จะไม่ผ่าน และใช้ภาพที่วาดแทน)
-  const L=TX.logo.image.getContext('2d');L.clearRect(0,0,512,420);L.drawImage(c,0,0);TX.logo.needsUpdate=true;setHeaderLogo();
-}catch(e){}};im.src='exat-logo.png';})();
 
 TX.pod=cvs(64,128,(g,w,h)=>{g.fillStyle='#3d8f97';g.fillRect(0,0,w,h);for(let x=0;x<w;x+=16){g.fillStyle='#eef3f6';g.fillRect(x,0,5,h);}g.fillStyle='#e5ebef';g.fillRect(0,h-10,w,10);});
 TX.podE=lit(0,0,1,.92,.5);
@@ -349,7 +341,7 @@ TX.house=cvs(128,128,(g,w,h)=>{noise(g,w,h,'#e3d9c6',.08,800);g.fillStyle='#f8f5
 TX.houseE=lit(38/128,34/128,90/128,82/128,.35);
 TX.brick=cvs(128,128,(g,w,h)=>{noise(g,w,h,'#8f5640',.15,1500);g.fillStyle='#2b3138';g.fillRect(30,24,68,64);g.fillStyle='#d9d4cc';g.fillRect(26,88,76,6);});
 TX.brickE=lit(30/128,24/128,98/128,88/128,.4);
-/* --- Data Center interior --- */
+/* --- Data Center / Facility Interior --- */
 TX.rackG=cvs(64,128,(g,w,h)=>{g.fillStyle='#0b0f16';g.fillRect(0,0,w,h);const gr=g.createLinearGradient(0,0,w,0);gr.addColorStop(0,'#1e3a8a');gr.addColorStop(.5,'#3b82f6');gr.addColorStop(1,'#1e3a8a');g.fillStyle=gr;g.fillRect(6,6,w-12,h-12);g.fillStyle='rgba(0,0,0,.35)';for(let y=8;y<h-8;y+=4)g.fillRect(8,y,w-16,2);g.fillStyle='#0b0f16';g.fillRect(w/2-1,6,2,h-12);});
 TX.rackE=cvs(64,128,(g,w,h)=>{g.fillStyle='#000';g.fillRect(0,0,w,h);for(let y=9;y<h-8;y+=6)if(Math.random()<.8){g.fillStyle=Math.random()<.7?'#22c55e':'#38bdf8';g.fillRect(10+(Math.random()*40|0),y,3,2);}});
 TX.tile=cvs(64,64,(g,w,h)=>{g.fillStyle='#e7eaee';g.fillRect(0,0,w,h);g.strokeStyle='#b8bfc8';g.lineWidth=2;g.strokeRect(1,1,w-2,h-2);});
@@ -403,7 +395,7 @@ function bed(w,d){const f=std({map:rep(TX.flower,Math.max(1,w/3),Math.max(1,d/3)
   return new THREE.Mesh(new THREE.BoxGeometry(w,.6,d),[HEDGE,HEDGE,f,HEDGE,HEDGE,HEDGE]);}
 
 /* =====================================================================
-   DATA CENTER FLOOR: ผังตามภาพตัวอย่าง + Airflow ลมร้อน/ลมเย็น
+   DATA CENTER & FACILITY FLOORS
    ===================================================================== */
 const FH=3.6,DCF=4.6,RFH=.45;   // ความสูงชั้นทั่วไป / ชั้น DC / Raised floor (เมตร)
 const AIR={on:true,floors:[],flows:[]};
@@ -420,14 +412,19 @@ const IM={
   scr:std({color:'#0b1f3a',emissive:'#38bdf8',emissiveIntensity:.8}),
   vw:std({map:TX.vwall,emissiveMap:TX.vwall,emissive:'#ffffff',emissiveIntensity:1}),
   red:std({color:'#dc2626',roughness:.35,metalness:.3}),
+  blue:std({color:'#1d4ed8',roughness:.35,metalness:.4}),
+  copper:std({color:'#b45309',roughness:.35,metalness:.6}),
   cold:new THREE.MeshBasicMaterial({color:'#38bdf8',transparent:true,opacity:.13,depthWrite:false,side:THREE.DoubleSide}),
   hot:new THREE.MeshBasicMaterial({color:'#ef4444',transparent:true,opacity:.1,depthWrite:false,side:THREE.DoubleSide}),
-  flow:new THREE.PointsMaterial({size:1.1,map:TX.dot,vertexColors:true,transparent:true,depthWrite:false,sizeAttenuation:true})
+  flow:new THREE.PointsMaterial({size:1.1,map:TX.dot,vertexColors:true,transparent:true,depthWrite:false,sizeAttenuation:true}),
+  wall:std({color:'#1e293b',roughness:.8}),
+  floorGray:std({color:'#334155',roughness:.8})
 };
 const F6=(m,i,f)=>{const a=[m,m,m,m,m,m];a[i]=f;return a;};
 const RACKM=F6(IM.rs,4,IM.rf),CRA=F6(IM.crac,4,IM.crf),CRB=F6(IM.crac,5,IM.crf),BATM=F6(IM.bside,4,IM.batt),PANM=F6(IM.ups,4,IM.panel),MONM=F6(IM.mon,5,IM.scr);
 const G2={rack:new THREE.BoxGeometry(.58,2,1.1),crac:new THREE.BoxGeometry(1.8,2.2,.9),batt:new THREE.BoxGeometry(.8,1.8,.6),
-  ups:new THREE.BoxGeometry(1.2,2,.8),panel:new THREE.BoxGeometry(.8,2,.6),cyl:new THREE.CylinderGeometry(.2,.2,1.5,12),mon:new THREE.BoxGeometry(.55,.33,.04)};
+  ups:new THREE.BoxGeometry(1.2,2,.8),panel:new THREE.BoxGeometry(.8,2,.6),cyl:new THREE.CylinderGeometry(.2,.2,1.5,12),mon:new THREE.BoxGeometry(.55,.33,.04),
+  chiller:new THREE.CylinderGeometry(.6,.6,2.2,16).rotateZ(Math.PI/2),pipe:new THREE.CylinderGeometry(.12,.12,1,12),transformer:new THREE.BoxGeometry(1.4,1.6,1.4)};
 
 /* w,d = ขนาดห้อง · H = ความสูงถึงฝ้า · cont = วัสดุ containment */
 function dcFloor(w,d,H,cont){
@@ -461,7 +458,7 @@ function dcFloor(w,d,H,cont){
   const m=Math.max(2,Math.round(hw/7)),crD=.9,crH=2.2,CX=[];
   for(let i=0;i<m;i++){const x=hx0+hw*(i+.5)/m;CX.push(x);
     [-1,1].forEach(wl=>ia(g,new THREE.Mesh(G2.crac,wl<0?CRA:CRB),x,RFH+crH/2,wl*(d/2-crD/2-.1)));}
-    // ===== ห้องสนับสนุน: UPS · ไฟฟ้า/ดับเพลิง/MMR · NOC · SOC =====
+  // ===== ห้องสนับสนุน: UPS · ไฟฟ้า/ดับเพลิง/MMR · NOC · SOC =====
   const crew=new THREE.Group();g.add(crew);   // คนทำงานในชั้นนี้ (ซ่อนเมื่อกล้องอยู่ไกล)
   const xl=-w/2+sl/2,xr=w/2-sr/2,nb=Math.max(2,Math.floor((sl-.8)/.95));
   // UPS & Battery (ซ้ายบน)
@@ -477,22 +474,14 @@ function dcFloor(w,d,H,cont){
   opsRoom(g,crew,xl,sl,d,fy,'NOC');opsRoom(g,crew,xr,sr,d,fy,'SOC');
   [[hx0+.05,Math.PI/2,'NOC'],[hx1-.05,-Math.PI/2,'SOC']].forEach(([x,ry,k])=>{const s=ia(g,new THREE.Mesh(GSIGN,SIGN[k]),x,H-.35,d/4);s.rotation.y=ry;});
   // วิศวกรปฏิบัติงาน
-  //const vPos=(x,z)=>new THREE.Vector3(x,fy,z),xa=hcx-len/2+.6,xb=hcx+len/2-.6,xc=hx0+1;
-  //walker(crew,person('#1d4ed8','#1e293b',{vest:'#f97316'}),[V(xa,PZ[0]),V(xb,PZ[0])],.6,{pause:5});            // ตรวจ Rack ใน Cold aisle
-  //walker(crew,person('#e2e8f0','#334155'),[V(xb-1,0),V(xa+1,0)],.8,{pause:3,delay:2});                          // เดินตรวจ Hot aisle
-  //const lp=person('#0f766e','#1f2937',{laptop:true});lp.position.copy(V(hcx+len*.18,PZ[1]+.2));lp.rotation.y=Math.PI;crew.add(lp);STAND.push(lp); // ทำงานกับ Laptop หน้า Rack
-  //walker(crew,person('#1d4ed8','#1e293b',{helmet:'#f8fafc',vest:'#facc15'}),[V(-w/2+.8,-d/2+1.2),V(-w/2+sl-.8,-d/2+1.2)],.5,{pause:6}); // ตรวจ UPS/Battery
-  //walker(crew,person('#475569','#1f2937',{helmet:'#facc15'}),[V(hx1+.8,-d/2+1.4),V(w/2-.8,-d/2+1.4)],.5,{pause:6,delay:3});          // ตรวจตู้ไฟฟ้า
-  //walker(crew,person('#f8fafc','#1e3a8a'),[V(xl,d/4),V(xc,d/4),V(xc,-d/4),V(xl,-d/4)],.9,{pause:4,delay:5});                       // NOC → โถง → ห้อง UPS
-
- const vPos=(x,z)=>new THREE.Vector3(x,fy,z),xa=hcx-len/2+.6,xb=hcx+len/2-.6,xc=hx0+1;
-walker(crew,person('#1d4ed8','#1e293b',{vest:'#f97316'}),[vPos(xa,PZ[0]),vPos(xb,PZ[0])],.6,{pause:5});
-walker(crew,person('#e2e8f0','#334155'),[vPos(xb-1,0),vPos(xa+1,0)],.8,{pause:3,delay:2});
-const lp=person('#0f766e','#1f2937',{laptop:true});lp.position.copy(vPos(hcx+len*.18,PZ[1]+.2));lp.rotation.y=Math.PI;crew.add(lp);STAND.push(lp);
-walker(crew,person('#1d4ed8','#1e293b',{helmet:'#f8fafc',vest:'#facc15'}),[vPos(-w/2+.8,-d/2+1.2),vPos(-w/2+sl-.8,-d/2+1.2)],.5,{pause:6});
-walker(crew,person('#475569','#1f2937',{helmet:'#facc15'}),[vPos(hx1+.8,-d/2+1.4),vPos(w/2-.8,-d/2+1.4)],.5,{pause:6,delay:3});
-walker(crew,person('#f8fafc','#1e3a8a'),[vPos(xl,d/4),vPos(xc,d/4),vPos(xc,-d/4),vPos(xl,-d/4)],.9,{pause:4,delay:5}); 
-// ผนังกระจกกั้นห้อง (เว้นช่องประตู)
+  const vPos=(x,z)=>new THREE.Vector3(x,fy,z),xa=hcx-len/2+.6,xb=hcx+len/2-.6,xc=hx0+1;
+  walker(crew,person('#1d4ed8','#1e293b',{vest:'#f97316'}),[vPos(xa,PZ[0]),vPos(xb,PZ[0])],.6,{pause:5});
+  walker(crew,person('#e2e8f0','#334155'),[vPos(xb-1,0),vPos(xa+1,0)],.8,{pause:3,delay:2});
+  const lp=person('#0f766e','#1f2937',{laptop:true});lp.position.copy(vPos(hcx+len*.18,PZ[1]+.2));lp.rotation.y=Math.PI;crew.add(lp);STAND.push(lp);
+  walker(crew,person('#1d4ed8','#1e293b',{helmet:'#f8fafc',vest:'#facc15'}),[vPos(-w/2+.8,-d/2+1.2),vPos(-w/2+sl-.8,-d/2+1.2)],.5,{pause:6});
+  walker(crew,person('#475569','#1f2937',{helmet:'#facc15'}),[vPos(hx1+.8,-d/2+1.4),vPos(w/2-.8,-d/2+1.4)],.5,{pause:6,delay:3});
+  walker(crew,person('#f8fafc','#1e3a8a'),[vPos(xl,d/4),vPos(xc,d/4),vPos(xc,-d/4),vPos(xl,-d/4)],.9,{pause:4,delay:5}); 
+  // ผนังกระจกกั้นห้อง (เว้นช่องประตู)
   const part=(x0,z0,x1,z1)=>{const L=Math.hypot(x1-x0,z1-z0),ax=Math.abs(x1-x0)>Math.abs(z1-z0),cx=(x0+x1)/2,cz=(z0+z1)/2;
     ia(g,new THREE.Mesh(ax?new THREE.BoxGeometry(L,H,.06):new THREE.BoxGeometry(.06,H,L),IM.glass),cx,H/2,cz);
     const fg=ax?new THREE.BoxGeometry(L,.08,.1):new THREE.BoxGeometry(.1,.08,L);
@@ -506,7 +495,7 @@ walker(crew,person('#f8fafc','#1e3a8a'),[vPos(xl,d/4),vPos(xc,d/4),vPos(xc,-d/4)
     const front=zc+s*ai/2,back=zc+s*(ai/2+rd),hz=back+s*.6;
     const wl=Math.abs(hz)<mid?(Math.random()<.5?-1:1):Math.sign(hz);
     const cx=CX.reduce((a,b)=>Math.abs(b-x)<Math.abs(a-x)?b:a),cz=wl*(d/2-crD/2-.1),py=RFH*.5,cy=H-.3;
-    const pts=[[cx,py,cz],[cx,py,cz-wl*.8],[x,py,zc+s*.15],[x,RFH+.15,zc+s*.15],[x,y,zc+s*.3],[x,y,front],[x,y,back],
+    const pts=[[cx,py,cz],[cx,py,cz-wl*.8],[x,py,zc+s*.15],[x,RFH+.15,zc+s*.15],[x,y,zc+s*.15],[x,y,front],[x,y,back],
       [x,y+.25,hz],[x,cy,hz+s*.1],[cx,cy,cz-wl*.2],[cx,RFH+crH+.05,cz]].map(p=>new THREE.Vector3(...p));
     const cum=[0];for(let i=1;i<pts.length;i++)cum.push(cum[i-1]+pts[i].distanceTo(pts[i-1]));
     paths.push({pts,cum,L:cum[cum.length-1],h0:cum[5],h1:cum[6]});}}));
@@ -516,6 +505,68 @@ walker(crew,person('#f8fafc','#1e3a8a'),[vPos(xl,d/4),vPos(xc,d/4),vPos(xc,-d/4)
   AIR.flows.push({geo,pos,col,P:Array.from({length:N},(_,i)=>{const pa=paths[i%paths.length];return{pa,d:Math.random()*pa.L,v:1.6+Math.random()*1.2};})});
   return {g,n,m,crew};
 }
+
+/* =====================================================================
+   NEW: FACILITY FLOOR (ชั้น 2 HQ: Electric Room, Chiller & AC, UPS)
+   ===================================================================== */
+function facilityFloor(w,d,H){
+  const g=new THREE.Group();
+  // พื้นชั้น 2
+  ia(g,new THREE.Mesh(new THREE.BoxGeometry(w,.06,d),IM.floorGray),0,.03,0);
+  
+  // แบ่งห้อง: w_left, w_mid, w_right
+  const wl=w*0.35, wm=w*0.38, wr=w*0.27;
+  const x0 = -w/2, x1 = x0 + wl, x2 = x1 + wm, x3 = w/2;
+  const cx_elec = (x0+x1)/2, cx_chiller = (x1+x2)/2, cx_ups = (x2+x3)/2;
+  
+  // 1. ผนังทึบกั้นห้อง
+  const addWall = (x, z0, z1) => {
+    const L = Math.abs(z1-z0), cz = (z0+z1)/2;
+    ia(g,new THREE.Mesh(new THREE.BoxGeometry(.12,H,L),IM.wall),x,H/2,cz);
+  };
+  addWall(x1, -d/2, d/2 - 2); // เว้นช่องทางเดิน/ประตู
+  addWall(x2, -d/2 + 2, d/2);
+  
+  // 2. ตกแต่งห้อง Electric Room (ซ้าย)
+  // หม้อแปลงไฟฟ้า, ตู้ MDB, แผงควบคุมระบบไฟฟ้า
+  for(let i=-2; i<=2; i++){
+    ia(g,new THREE.Mesh(G2.transformer,IM.copper),cx_elec - 1.5, .8, i*2.2);
+    ia(g,new THREE.Mesh(G2.panel,PANM),cx_elec + 1.2, 1, i*1.8);
+  }
+  // ป้ายห้อง Electric Room
+  const sElec = ia(g,new THREE.Mesh(GSIGN,new THREE.MeshBasicMaterial({map:signTex('⚡ Elec','Electrical Main Room','#f59e0b'),toneMapped:false})),cx_elec,H-0.4,d/2-0.1);
+  sElec.rotation.y = Math.PI;
+
+  // 3. ตกแต่งห้อง Chiller & Air-Condition (กลาง)
+  // เครื่อง Chiller ทรงกระบอกแนวนอนสีน้ำเงิน, ท่อส่งน้ำเย็นสีฟ้า/แดง, เครื่องปรับอากาศ
+  for(let i=-1; i<=1; i++){
+    const ch = ia(g,new THREE.Mesh(G2.chiller,IM.blue),cx_chiller, .6, i*4);
+    // ท่อเชื่อมจากเครื่อง Chiller ขึ้นไปด้านบน
+    ia(g,new THREE.Mesh(G2.pipe,IM.blue),cx_chiller-0.6, 1.8, i*4);
+    ia(g,new THREE.Mesh(G2.pipe,IM.red),cx_chiller+0.6, 1.8, i*4);
+  }
+  // ป้ายห้อง Chiller & Air-Condition Room
+  const sChill = ia(g,new THREE.Mesh(GSIGN,new THREE.MeshBasicMaterial({map:signTex('❄ Chiller','Chiller & A/C Plant','#38bdf8'),toneMapped:false})),cx_chiller,H-0.4,d/2-0.1);
+  sChill.rotation.y = Math.PI;
+
+  // 4. ตกแต่งห้อง UPS Room (ขวา)
+  // เครื่องสำรองไฟฟ้า UPS ความจุสูง และชั้นวาง Battery Backup
+  for(let i=-2; i<=2; i++){
+    ia(g,new THREE.Mesh(G2.ups,IM.ups),cx_ups - 1.2, 1, i*1.8);
+    ia(g,new THREE.Mesh(G2.batt,BATM),cx_ups + 1.2, 1, i*1.6);
+  }
+  // ป้ายห้อง UPS Room
+  const sUps = ia(g,new THREE.Mesh(GSIGN,new THREE.MeshBasicMaterial({map:signTex('🔋 UPS','Uninterruptible Power Supply','#22c55e'),toneMapped:false})),cx_ups,H-0.4,d/2-0.1);
+  sUps.rotation.y = Math.PI;
+
+  // วิศวกรดูแลระบบ Facility (เดินตรวจห้องต่างๆ)
+  const crew=new THREE.Group(); g.add(crew);
+  walker(crew,person('#f97316','#1e293b',{helmet:'#f8fafc',vest:'#facc15'}),[new THREE.Vector3(cx_elec,0.06,0),new THREE.Vector3(cx_chiller,0.06,0)],.7,{pause:8});
+  walker(crew,person('#1d4ed8','#1e293b',{helmet:'#facc15'}),[new THREE.Vector3(cx_chiller,0.06,-2),new THREE.Vector3(cx_ups,0.06,-2)],.6,{pause:5,delay:3});
+
+  return {g,crew};
+}
+
 function flow(dt){
   if(!AIR.on)return;
   const C0=[.2,.68,1],C1=[1,.27,.18];
@@ -533,7 +584,7 @@ function setAir(on){AIR.on=on;IM.flow.visible=IM.cold.visible=IM.hot.visible=on;
   AIR.floors.forEach(m=>{m.opacity=on?.5:1;m.depthWrite=!on;m.needsUpdate=true;});$('bAir').classList.toggle('on',on);}
 
 /* =====================================================================
-   PEOPLE: วิศวกร · Operator NOC/SOC · คนเดินเท้า · นักฟุตบอล (ภาพประกอบ)
+   PEOPLE ANIMATIONS & MODELS
    ===================================================================== */
 const PG={
   leg:new THREE.BoxGeometry(.15,.82,.17).translate(0,-.41,0),torso:new THREE.BoxGeometry(.4,.6,.23),
@@ -590,7 +641,6 @@ function seated(o){const u=o.userData;u.seat=true;u.b.position.y=-.38;u.L.forEac
 function face(o,dx,dz,dt){let da=Math.atan2(dx,dz)-o.rotation.y;da=Math.atan2(Math.sin(da),Math.cos(da));o.rotation.y+=da*Math.min(1,dt*8);}
 function moveTo(o,tx,tz,sp,dt){const p=o.position,dx=tx-p.x,dz=tz-p.z,d=Math.hypot(dx,dz);if(d<.05)return 0;
   const s=Math.min(sp,d*2.5),st=Math.min(d,s*dt);p.x+=dx/d*st;p.z+=dz/d*st;face(o,dx,dz,dt);return s;}
-// เดินตามจุด: ไป-กลับ (หยุดพักที่ปลายทาง) หรือวนรอบ (loop)
 function walker(parent,o,pts,spd,opt={}){parent.add(o);const s=opt.start||0;o.position.copy(pts[s]);
   WALK.push({o,pts,spd,i:(s+1)%pts.length,step:1,loop:!!opt.loop,pause:opt.pause||0,wait:opt.delay||0});return o;}
 function walk(dt,t){
@@ -605,7 +655,6 @@ function walk(dt,t){
   STAND.forEach(o=>pose(o,0,t));
   IDLE.forEach(o=>{const u=o.userData;u.A[0].rotation.x=-1.15+Math.sin(t*16+u.ph)*.06;u.A[1].rotation.x=-1.15+Math.sin(t*15+u.ph+1.5)*.06;});
 }
-// ห้องปฏิบัติการ NOC / SOC: Video wall + โต๊ะ 2 แถว + จอคู่ + Operator
 function opsRoom(g,crew,cx,rw,d,fy,kind){
   const soc=kind==='SOC',W=rw*.82,ns=Math.max(2,Math.min(4,Math.floor(W*.9/1.2)));
   ia(g,new THREE.Mesh(new THREE.BoxGeometry(W+.2,1.8,.08),IM.mon),cx,fy+1.75,d/2-.05);
@@ -621,11 +670,16 @@ function opsRoom(g,crew,cx,rw,d,fy,kind){
         p.position.set(x,fy,z-.62);seated(p);crew.add(p);}}
   });
 }
+
 /* ===== ป้ายข้อมูล 3D ===== */
 const B={};
 function infoCard(k){
   const s=S[k],st=stat(k);
-  return `<b>${s.name}</b><div class="fs">อาคาร ${s.fl} ชั้น · Data Center ชั้น ${s.dc}</div>
+  let detailHTML = `<b>${s.name}</b><div class="fs">อาคาร ${s.fl} ชั้น · Data Center ชั้น ${s.dc}</div>`;
+  if(s.fac) {
+    detailHTML = `<b>${s.name}</b><div class="fs">อาคาร ${s.fl} ชั้น · Data Center ชั้น ${s.dc} · Facility ชั้น ${s.fac}</div>`;
+  }
+  return detailHTML + `
     <div class="r k"><span>เข้า-ออก DC</span><span>${st.n?fN(st.acc)+' ครั้ง':'n/a'}</span></div>
     <div class="r"><span>PM Facility</span><span class="${st.pm>=100?'ok':'warn'}">${fP(st.pm)}</span></div>
     <div class="r"><span>Available</span><span class="${st.dt?'warn':'ok'}">${fA(st.av)}</span></div>
@@ -642,28 +696,58 @@ function addLabels(k,topPos,tagPos){
 function updateLabels(){
   K.forEach(k=>{const b=B[k];if(!b||!b.card)return;
     b.card.innerHTML=infoCard(k);b.card.classList.toggle('sel',sel===k);
-    b.tagEl.textContent=`◀ ชั้น ${S[k].dc} · Data Center`;
+    let tagText = `◀ ชั้น ${S[k].dc} · Data Center`;
+    if(S[k].fac) {
+      tagText += ` / ชั้น ${S[k].fac} · Facility Room`;
+    }
+    b.tagEl.textContent=tagText;
     b.tagEl.style.setProperty('--c',stat(k).dt?'#f59e0b':'#22c55e');});
 }
 
-/* ===== อาคาร HQ (27 ชั้น · DC ชั้น 6) ===== */
+/* ===== อาคาร HQ (27 ชั้น · DC ชั้น 6 · Facility ชั้น 2) ===== */
 function buildHQ(){
   const k='HQ',s=S[k],G=new THREE.Group(),PI=Math.PI;G.position.set(s.p[0],0,s.p[1]);G.userData.k=k;scene.add(G);CUR=SHELL[k]=[];
-  const W=44,D=22,cx=8,cz=11,r=14,dz=(s.dc-1)*FH,up=dz+DCF,top=up+(s.fl-s.dc)*FH,CR=14,gO={roughness:.18,metalness:.35};
+  const W=44,D=22,cx=8,cz=11,r=14,gO={roughness:.18,metalness:.35};
+  const dz=(s.dc-1)*FH,up=dz+DCF,top=up+(s.fl-s.dc)*FH,CR=14;
   const roof=shell({map:rep(TX.conc,4,2),roughness:.9}),fin=shell({color:'#f5f7f9',roughness:.5});
   const curve=(h,nf)=>new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,40,1,true,-PI/2,PI),fmat('band',16,nf,{roughness:.3,metalness:.2}));
   const half=m=>new THREE.Mesh(new THREE.CylinderGeometry(r,r,.4,40,1,false,-PI/2,PI),m);
-  // ชั้น 1-5
-  add(G,fbox(W,dz,D,'tower',3.6,s.dc-1,roof,gO),0,dz/2,0);
-  add(G,curve(dz,s.dc-1),cx,dz/2,cz);
-  add(G,new THREE.Mesh(new THREE.BoxGeometry(1.2,dz,16),fin),cx-r-.6,dz/2,cz+4);
-  add(G,new THREE.Mesh(new THREE.BoxGeometry(16,.5,6),fin),cx,5,cz+r+3);
+  
+  // ชั้น 1-5 (ส่วนฐานอาคาร มีห้อง Facility และการเจาะหน้าต่างชั้นอื่นๆ)
+  // เพื่อให้มองเห็นชั้น 2 ได้ชัดเจนใน X-Ray หรือระเบิดผัง, เราแยกกลุ่มของชั้นต่างๆ
+  const baseG = new THREE.Group(); G.add(baseG);
+  
+  // ชั้น 1 (ใต้ห้อง Facility)
+  add(baseG, fbox(W, FH, D, 'tower', 3.6, 1, roof, gO), 0, FH/2, 0);
+  add(baseG, curve(FH, 1), cx, FH/2, cz);
+
+  // ชั้น 2: Facility Room (Electric, Chiller/AC, UPS)
+  const facH = FH - 0.2;
+  const facFloorMat = dcGlass(); // เพื่อให้สังเกตเห็นเครื่องจักรข้างในชั้น 2 ได้
+  add(baseG, new THREE.Mesh(new THREE.BoxGeometry(W-0.3, facH, D-0.3), [facFloorMat, facFloorMat, NOM, NOM, facFloorMat, facFloorMat]), 0, FH + facH/2, 0, false);
+  add(baseG, new THREE.Mesh(new THREE.CylinderGeometry(r-.15, r-.15, facH, 40, 1, true, -PI/2, PI), facFloorMat), cx, FH + facH/2, cz, false);
+  add(baseG, new THREE.Mesh(new THREE.BoxGeometry(W, 0.2, D), SLAB), 0, FH + 0.1, 0);
+  add(baseG, half(SLAB), cx, FH + 0.1, cz);
+
+  const facLayout = facilityFloor(W-4, D-4, facH - 0.4);
+  facLayout.g.position.set(-1, FH + 0.2, 0);
+  baseG.add(facLayout.g);
+
+  // ชั้น 3-5
+  const d_rem = dz - (FH + facH + 0.2);
+  add(baseG, fbox(W, d_rem, D, 'tower', 3.6, 3, roof, gO), 0, (FH + facH + 0.2) + d_rem/2, 0);
+  add(baseG, curve(d_rem, 3), cx, (FH + facH + 0.2) + d_rem/2, cz);
+
+  add(baseG, new THREE.Mesh(new THREE.BoxGeometry(1.2, dz, 16), fin), cx-r-.6, dz/2, cz+4);
+  add(baseG, new THREE.Mesh(new THREE.BoxGeometry(16,.5,6), fin), cx, 5, cz+r+3);
+
   // ชั้น 6: Data Center
   const dcM=dcGlass(),cont=contMat();
   add(G,new THREE.Mesh(new THREE.BoxGeometry(W-.3,DCF-.4,D-.3),[dcM,dcM,NOM,NOM,dcM,dcM]),0,dz+DCF/2,0,false);
   add(G,new THREE.Mesh(new THREE.CylinderGeometry(r-.15,r-.15,DCF-.4,40,1,true,-PI/2,PI),dcM),cx,dz+DCF/2,cz,false);
   add(G,new THREE.Mesh(new THREE.BoxGeometry(W,.4,D),SLAB),0,dz+.2,0);add(G,half(SLAB),cx,dz+.2,cz);
   const L=dcFloor(W-4,D-4,DCF-.9,cont);L.g.position.set(-1,dz+.4,0);G.add(L.g);
+  
   // ชั้น 7-27 + ยอด (ยกขึ้นได้)
   const U=new THREE.Group();G.add(U);
   add(U,new THREE.Mesh(new THREE.BoxGeometry(W,.4,D),SLAB),0,up-.2,0);add(U,half(SLAB),cx,up-.2,cz);
@@ -675,14 +759,15 @@ function buildHQ(){
   add(U,new THREE.Mesh(new THREE.CylinderGeometry(r,r,CR,40,1,true,-PI/2,PI),crM),cx,top+CR/2,cz);
   add(U,new THREE.Mesh(new THREE.BoxGeometry(2*r,CR,.4),crM),cx,top+CR/2,cz);
   add(U,half(shell({color:'#9cc8ea',roughness:.3,metalness:.3})),cx,top+CR+.2,cz);
-    const lgM=shell({map:TX.logo,emissiveMap:TX.logo,emissive:'#ffffff',emissiveIntensity:0,roughness:.5});NIGHT.push(lgM);  // กลางคืนป้ายโลโก้เรืองแสง
+  const lgM=shell({map:TX.logo,emissiveMap:TX.logo,emissive:'#ffffff',emissiveIntensity:0,roughness:.5});NIGHT.push(lgM);
   const lg=new THREE.Mesh(new THREE.PlaneGeometry(11,9),lgM);lg.position.set(cx,top+CR*.55,cz+r+.1);U.add(lg);
   [[-14,-4],[-6,-5],[-14,4]].forEach(([x,z])=>add(U,new THREE.Mesh(new THREE.BoxGeometry(5,2,4),MAT.unit),x,top+1,z));
   // อาคารทรงกลม 4 ชั้น
   const pr=15,ph=4*FH;
   add(G,new THREE.Mesh(new THREE.CylinderGeometry(pr,pr,ph,48),[fmat('pod',32,4,{roughness:.25,metalness:.25}),shell({map:TX.heli,roughness:.8}),roof]),40,ph/2,-2);
   add(G,new THREE.Mesh(new THREE.CylinderGeometry(pr+.35,pr+.35,1.6,48,1,true),shell({map:rep(TX.flower,20,1),roughness:1})),40,ph-.6,-2);
-  B[k]={g:G,u:U,ring:ring(G,46,16,-6),dcM,cont,max:16,lay:L,focus:new THREE.Vector3(s.p[0]-1,dz+1.5,s.p[1]),dist:95,stc:'#22c55e',flash:0};
+  
+  B[k]={g:G,u:U,ring:ring(G,46,16,-6),dcM,cont,max:16,lay:L,facLay:facLayout,focus:new THREE.Vector3(s.p[0]-1,dz+1.5,s.p[1]),dist:95,stc:'#22c55e',flash:0};
   addLabels(k,[0,top+CR+28,0],[-W/2-1,dz+DCF/2,D/2]);
   createHelicopter(scene, S.HQ.p[0]+40, S.HQ.p[1]-2, 4*FH);
 }
@@ -711,7 +796,7 @@ function buildCCB(k){
   add(U,new THREE.Mesh(new THREE.BoxGeometry(.06,1.2,D-.2),scr),-15.9,up+.6,0);
   [[-13,-6],[-8,6]].forEach(([x,z])=>add(U,new THREE.Mesh(new THREE.BoxGeometry(1.2,.7,1.2),MAT.planter),x,up+.35,z));
   [[2,-4],[8,3],[12,-5]].forEach(([x,z])=>add(U,new THREE.Mesh(new THREE.BoxGeometry(2.4,1.2,1.6),MAT.unit),x,rtop+1.1,z));
-  // ลานไม้ + เก้าอี้อาบแดด + แปลงดอกไม้
+  // ลานไม้ + แปลงดอกไม้
   add(G,new THREE.Mesh(new THREE.BoxGeometry(W+10,.3,7),MAT.wood),0,.15,D/2+3.5);
   [-8,-4].forEach(x=>add(G,new THREE.Mesh(new THREE.BoxGeometry(.8,.35,2),MAT.white),x,.47,D/2+4));
   add(G,bed(W+10,1.5),0,.3,D/2+7.8);
@@ -722,7 +807,7 @@ let heliRotors=[];
 buildHQ();K.filter(k=>k!=='HQ').forEach(buildCCB);CUR=null;
 
 /* =====================================================================
-   LANDSCAPE: ถนน · สี่แยก · ทางพิเศษ · สวน · ป่าไม้ · รถ (ภาพประกอบ)
+   LANDSCAPE: ถนน · ทางพิเศษ · สวน · ป่าไม้ · รถ (ภาพประกอบ)
    ===================================================================== */
 const RX=[-75,75],HZ=45,RL=700,EZ=-165,EH=12;
 const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),v3=new THREE.Vector3(),sv=new THREE.Vector3(),eu=new THREE.Euler();
@@ -863,29 +948,24 @@ function traffic(dt,t){
     });
   });
 }
-/* ===== เฮลิคอปเตอร์บนลานจอดดาดฟ้าอาคารทรงกลม ===== */
-
+/* ===== เฮลิคอปเตอร์ ===== */
 function createHelicopter(parent,x,z,y){
   const g=new THREE.Group();g.position.set(x,y,z);g.scale.setScalar(.75);
   const bm=std({color:'#cbd5e1',roughness:.3,metalness:.6}),
         dm=std({color:'#1e293b',roughness:.2,metalness:.8,transparent:true,opacity:.7}),
         rm=std({color:'#111827',roughness:.5});
-  // ตัวเครื่องและห้องนักบิน
   add(g,new THREE.Mesh(new THREE.CapsuleGeometry(1.2,3.2,8,16),bm),0,1.2,0).rotation.x=Math.PI/2;
   const cabin=new THREE.Mesh(new THREE.BoxGeometry(2.1,1.8,2.4),bm);cabin.position.set(0,1.3,.3);g.add(cabin);
   const nose=new THREE.Mesh(new THREE.SphereGeometry(1.05,16,16),bm);nose.scale.set(1,.9,1.4);nose.position.set(0,1.2,-1.4);g.add(nose);
   const glass=new THREE.Mesh(new THREE.SphereGeometry(.95,16,16,0,Math.PI*2,0,Math.PI/2),dm);glass.scale.set(.95,.85,1.2);glass.position.set(0,1.4,-1.1);g.add(glass);
-  // หางและใบพัดหาง
   const tail=new THREE.Mesh(new THREE.CylinderGeometry(.35,.2,4.8,8),bm);tail.position.set(0,1.5,3.2);tail.rotation.x=Math.PI/2;g.add(tail);
   const fin=new THREE.Mesh(new THREE.BoxGeometry(.08,1.2,.8),bm);fin.position.set(0,2,5.2);g.add(fin);
   const tRotor=new THREE.Group();tRotor.position.set(.12,2,5.6);
   for(let i=0;i<2;i++)tRotor.add(new THREE.Mesh(new THREE.BoxGeometry(.04,.9,.12),rm));g.add(tRotor);
-  // สกิดลานจอด (Skids)
   [-1,1].forEach(s=>{
     const leg=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.9),rm);leg.position.set(s*1.1,.45,0);g.add(leg);
     const skid=new THREE.Mesh(new THREE.BoxGeometry(.18,.12,4.2),rm);skid.position.set(s*1.1,.06,0);g.add(skid);
   });
-  // ใบพัดหลักด้านบน
   const mast=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.6),rm);mast.position.set(0,2.5,0);g.add(mast);
   const mRotor=new THREE.Group();mRotor.position.set(0,2.8,0);
   for(let i=0;i<4;i++){const b=new THREE.Mesh(new THREE.BoxGeometry(6.4,.04,.35),rm);b.rotation.y=i*Math.PI/2;mRotor.add(b);}
@@ -894,28 +974,24 @@ function createHelicopter(parent,x,z,y){
   heliRotors.push({m:mRotor,t:tRotor});
 }
 
-/* ===== คนเดินเท้า · ลานจอดรถ · นักวิ่ง · ฟุตบอล (ภาพประกอบ) ===== */
+/* ===== คนเดินเท้า · นักวิ่ง · ฟุตบอล (ภาพประกอบ) ===== */
 const CROWD=new THREE.Group();scene.add(CROWD);
 const CLOTH=['#f8fafc','#1e3a8a','#dc2626','#16a34a','#facc15','#0ea5e9','#111827','#f472b6','#a16207','#64748b'],PANTS=['#1f2937','#334155','#1e3a8a','#78716c','#0f172a'];
 const civ=()=>person(rpick(CLOTH),rpick(PANTS),{shadow:true});
 const P3=(x,z,y=.2)=>new THREE.Vector3(x,y,z),rr=(a,b)=>a+Math.random()*(b-a);
-// 1) ทางเท้าริมถนน
 [31.5,58.5].forEach(z=>{for(let i=0;i<9;i++){const a=rr(-280,200),b=a+rr(60,200),zz=z+rr(-.6,.6),pts=[P3(a,zz),P3(b,zz)];
   if(Math.random()<.5)pts.reverse();walker(CROWD,civ(),pts,rr(1.1,1.6),{pause:rr(0,3)});}});
 RX.forEach(X=>[-8.5,8.5].forEach(s=>{for(let i=0;i<3;i++){const a=rr(-220,-20),b=a+rr(80,230),x=X+s+rr(-.5,.5),pts=[P3(x,a),P3(x,b)];
   if(Math.random()<.5)pts.reverse();walker(CROWD,civ(),pts,rr(1.1,1.6),{pause:rr(0,3)});}}));
-// 2) ลานจอดรถ → ทางม้าลาย → อาคาร HQ (แล้วเดินกลับไปที่รถ)
 const zbs=[];for(let z=34;z<56.5;z+=1.25)if(Math.abs(z-HZ)>1.2)zbs.push(z);
 const zbI=new THREE.InstancedMesh(new THREE.PlaneGeometry(3.6,.6).rotateX(-Math.PI/2),mkI.material,zbs.length);
 zbs.forEach((z,i)=>{m4.makeTranslation(1,.12,z);zbI.setMatrixAt(i,m4);});scene.add(zbI);
 for(let i=0;i<10;i++){const x=-55.3+Math.floor(Math.random()*42)*2.7,z=Math.random()<.5?70.5:93.5;
   walker(CROWD,civ(),[P3(x,z,.05),P3(x,82,.05),P3(1,82,.05),P3(1,60,.05),P3(1,31.5),P3(8,29,.05),P3(8,-11,.05)],rr(1.1,1.5),{pause:rr(8,20),delay:rr(0,25)});}
-// 3) นักวิ่งรอบลู่
 const TRK=[],TX0=-48,TZ0=-80;
 for(let i=0;i<=16;i++){const a=Math.PI*i/16;TRK.push(P3(TX0+15*Math.cos(a),TZ0+24+15*Math.sin(a),.06));}
 for(let i=0;i<=16;i++){const a=Math.PI+Math.PI*i/16;TRK.push(P3(TX0+15*Math.cos(a),TZ0-24+15*Math.sin(a),.06));}
 [0,11,22].forEach(s=>walker(CROWD,person(rpick(['#f97316','#22c55e','#ec4899']),'#111827',{shadow:true}),TRK,rr(2.6,3.4),{loop:true,start:s}));
-// 4) ฟุตบอล: ทีมแดง (บุก +z) vs ทีมน้ำเงิน (บุก -z)
 const FB={cx:-48,cz:-80,hw:9,hl:23.5,gw:2.6},FBS={score:[0,0],reset:0,kick:0},bv=new THREE.Vector3(2,0,1);
 const WHT=pmat('#f8fafc'),NETM=std({color:'#ffffff',transparent:true,opacity:.22,depthWrite:false,side:THREE.DoubleSide});
 [-1,1].forEach(s=>{const z=FB.cz+s*FB.hl;
@@ -957,8 +1033,8 @@ function football(dt,t){
     p.cd-=dt;
     if(FBS.reset<=0&&FBS.kick<=0&&p.cd<=0&&bp.y<.7&&Math.hypot(bp.x-p.o.position.x,bp.z-p.o.position.z)<.8){
       p.cd=1.2;FBS.kick=.4;const gz=FB.cz+T.dir*(FB.hl+1);let ax,az;
-      if(!p.gk&&(Math.abs(gz-bp.z)<16||Math.random()<.25)){ax=FB.cx+rr(-FB.gw,FB.gw);az=gz;}            // ยิงประตู
-      else{const m=rpick(PLY.filter(q=>q.team===p.team&&!q.gk&&q!==p));ax=m.o.position.x;az=m.o.position.z+T.dir*3;} // ส่งบอล
+      if(!p.gk&&(Math.abs(gz-bp.z)<16||Math.random()<.25)){ax=FB.cx+rr(-FB.gw,FB.gw);az=gz;}
+      else{const m=rpick(PLY.filter(q=>q.team===p.team&&!q.gk&&q!==p));ax=m.o.position.x;az=m.o.position.z+T.dir*3;}
       const kx=ax-bp.x,kz=az-bp.z,L=Math.hypot(kx,kz)||1,v=Math.min(17,6+L*.5);
       bv.set(kx/L*v,Math.random()<.35?rr(2,4.5):.4,kz/L*v);
     }
@@ -1003,8 +1079,14 @@ function frame(){
   const dt=Math.min(.05,clock.getDelta()),t=clock.elapsedTime;
   if(fly){camera.position.lerp(fly.pos,.06);controls.target.lerp(fly.tgt,.06);
     if(camera.position.distanceTo(fly.pos)<.3&&controls.target.distanceTo(fly.tgt)<.3)fly=null;}
-    controls.update();traffic(dt,t);flow(dt);walk(dt,t);football(dt,t);
-  K.forEach(k=>B[k].lay.crew.visible=camera.position.distanceTo(B[k].focus)<320);   // แสดงคนในอาคารเมื่อซูมเข้าใกล้
+  controls.update();traffic(dt,t);flow(dt);walk(dt,t);football(dt,t);
+  K.forEach(k=>{
+    const distance = camera.position.distanceTo(B[k].focus);
+    B[k].lay.crew.visible=distance<320;
+    if(B[k].facLay) {
+      B[k].facLay.crew.visible=distance<320;
+    }
+  });
 
   K.forEach(k=>{const b=B[k],open=explode||sel===k;b.u.position.y+=((open?b.max:0)-b.u.position.y)*.07;
     b.dcM.emissiveIntensity=(night?.7:.25)+beat*1.2;b.cont.emissiveIntensity=(night?1.6:.9)+beat*2;
@@ -1056,13 +1138,39 @@ function airSVG(){
 /* ===== PANELS ===== */
 function detail(){
   const k=sel==='ALL'?'HQ':sel,s=S[k],st=stat(k),stc=st.dt?'#f59e0b':'#22c55e',L=B[k].lay;
-  $('dTitle').textContent='Data Center & Airflow · '+s.name;
-  $('dSub').textContent=`ชั้น ${s.dc} จาก ${s.fl} ชั้น`;
+  
+  if (k==='HQ') {
+    $('dTitle').textContent='HQ Facility & Airflow · '+s.name;
+    $('dSub').textContent=`ชั้น DC: ${s.dc} · ชั้น Fac: ${s.fac} จาก ${s.fl} ชั้น`;
+  } else {
+    $('dTitle').textContent='Data Center & Airflow · '+s.name;
+    $('dSub').textContent=`ชั้น ${s.dc} จาก ${s.fl} ชั้น`;
+  }
+
   const sk=$('stack');sk.style.setProperty('--st',stc);
-  let h='';for(let f=1;f<=s.fl;f++)h+=`<div class="${f===s.dc?'dc':''}" title="ชั้น ${f}">${f===s.dc?'ชั้น '+f:''}</div>`;
+  let h='';
+  for(let f=1;f<=s.fl;f++) {
+    let cls = '';
+    let labelText = '';
+    if (f===s.dc) {
+      cls = 'dc';
+      labelText = 'DC ช.' + f;
+    } else if (f===s.fac) {
+      cls = 'fac-room';
+      labelText = 'Fac ช.' + f;
+    }
+    h+=`<div class="${cls}" style="${f===s.fac ? 'background-color:#b45309;flex:3;color:#fff;font-weight:600' : ''}" title="ชั้น ${f}">${labelText ? labelText : ''}</div>`;
+  }
   sk.innerHTML=h;$('stCap').textContent=`${s.fl} ชั้น`;
+  
   $('dview').innerHTML=airSVG();
-  $('dNote').textContent=`ภาพจำลอง: Containment 2 ชุด · Rack ${L.n*4} ตู้ · CRAC ${L.m*2} เครื่อง (ไม่ใช่จำนวนจริง) · อุณหภูมิเป็นค่าอ้างอิงตามแนวทาง ASHRAE ไม่ใช่ค่าที่วัดได้`;
+  
+  if (k==='HQ') {
+    $('dNote').textContent=`ภาพจำลอง: ชั้น 6 Data Center (Rack ${L.n*4} ตู้ · CRAC ${L.m*2} เครื่อง) และชั้น 2 Facility Rooms (ห้องไฟฟ้าแรงต่ำ MDB, ห้อง Chiller & AC โรงผลิตน้ำเย็น, ห้องเครื่องสำรองไฟ UPS & แบตเตอรี่หลัก)`;
+  } else {
+    $('dNote').textContent=`ภาพจำลอง: Containment 2 ชุด · Rack ${L.n*4} ตู้ · CRAC ${L.m*2} เครื่อง (ไม่ใช่จำนวนจริง) · อุณหภูมิเป็นค่าอ้างอิงตามแนวทาง ASHRAE ไม่ใช่ค่าที่วัดได้`;
+  }
+  
   const lastDev=[...s.dev].slice(R[0],R[1]+1).filter(v=>v!=null).pop();
   $('mini').innerHTML=`
     <div>เข้า-ออก<b>${st.n?fN(st.acc):'n/a'}</b></div>
@@ -1083,10 +1191,14 @@ function kpis(){
   <div class="kpi" style="border-left-color:${dt?'var(--warn)':'var(--ok)'}"><div class="l">Unplanned Downtime รวม</div><div class="v">${dt} <small>นาที</small></div><div class="s">${inc} เหตุการณ์</div></div>`;
 }
 function table(){
-  let h='<thead><tr><th>อาคาร</th><th>DC ชั้น</th><th>เข้า-ออก</th><th>PM</th><th>Availability</th></tr></thead><tbody>';
+  let h='<thead><tr><th>อาคาร</th><th>ชั้นควบคุม</th><th>เข้า-ออก</th><th>PM</th><th>Availability</th></tr></thead><tbody>';
   K.forEach(k=>{const s=stat(k);
+    let floorInfo = `${S[k].dc}/${S[k].fl}`;
+    if (S[k].fac) {
+      floorInfo = `DC:${S[k].dc} | Fac:${S[k].fac} (จาก ${S[k].fl})`;
+    }
     h+=`<tr class="${sel===k?'sel':''}" data-k="${k}"><td><span class="dot" style="background:${S[k].col}"></span>${k}</td>
-    <td>${S[k].dc}/${S[k].fl}</td><td>${s.n?fN(s.acc)+(s.miss?'*':''):'n/a'}</td>
+    <td>${floorInfo}</td><td>${s.n?fN(s.acc)+(s.miss?'*':''):'n/a'}</td>
     <td class="${s.pm>=100?'ok':'warn'}">${fP(s.pm)}</td><td class="${s.dt?'warn':'ok'}">${fA(s.av)}</td></tr>`;});
   $('tbl').innerHTML=h+'</tbody>';
   $('tbl').querySelectorAll('tbody tr').forEach(r=>r.onclick=()=>select(r.dataset.k));
@@ -1124,14 +1236,14 @@ function heat(){
 }
 function inc(){
   const L=INC.filter(x=>x.m>=R[0]&&x.m<=R[1]&&(sel==='ALL'||x.k===sel));
-  $('inc').innerHTML=L.length?L.map(x=>`<div class="inc"><b>${x.k}</b> (DC ชั้น ${S[x.k].dc}) · ${M[x.m]||''} · <b class="warn">${x.min} นาที</b><br>${x.c}</div>`).join('')
+  $('inc').innerHTML=L.length?L.map(x=>`<div class="inc"><b>${x.k}</b> (DC ชั้น ${S[x.k].dc}${S[x.k].fac ? ` · Facility ชั้น ${S[x.k].fac}` : ''}) · ${M[x.m]||''} · <b class="warn">${x.min} นาที</b><br>${x.c}</div>`).join('')
     :'<div class="note ok">ไม่มี Unplanned Downtime ในช่วงที่เลือก</div>';
 }
 function select(k){sel=sel===k?'ALL':k;focus();render();}
 function render(){
   update3D();kpis();table();chart();heat();inc();detail();
   $('perLbl').textContent=per.options[per.selectedIndex].text;
-  $('selName').textContent=sel==='ALL'?'คลิกอาคารเพื่อดูชั้น Data Center':`${S[sel].name} · DC ชั้น ${S[sel].dc} (คลิกซ้ำเพื่อกลับ)`;
+  $('selName').textContent=sel==='ALL'?'คลิกอาคารเพื่อดูรายละเอียดห้องเครื่องและอุปกรณ์':`${S[sel].name} · DC ชั้น ${S[sel].dc}${S[sel].fac ? ` & Fac ชั้น ${S[sel].fac}` : ''} (คลิกซ้ำเพื่อกลับ)`;
 }
 
 /* ===== โหมดนำเสนอ ===== */
@@ -1251,7 +1363,7 @@ async function toggleMusic(){
   setupViz();
   if(actx&&actx.state==='suspended')await actx.resume();
   try{await bgm.play();}
-  catch(e){alert('ไม่พบไฟล์ walk1.mp3 - วางไฟล์ไว้โฟลเดอร์เดียวกับ Dashboard หรือกด 📁 เพื่อเลือกไฟล์');}
+  catch(e){console.log('BGM Not loaded');}
 }
 mPlay.onclick=toggleMusic;
 bgm.onplay =()=>{mPlay.textContent='⏸ เพลง';mPlay.classList.add('on');};
